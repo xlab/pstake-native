@@ -6,57 +6,12 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingTypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	cosmosTypes "github.com/persistenceOne/pstake-native/x/cosmos/types"
+	"github.com/persistenceOne/pstake-native/x/cosmos/types"
 )
 
-type InternalWeightedAddressCosmos []cosmosTypes.WeightedAddressCosmos
-
-var _ sort.Interface = InternalWeightedAddressCosmos{}
-
-func ConvertToInternalWeightedAddressCosmos(weightedAddressCosmos []cosmosTypes.WeightedAddressCosmos) (internalWeightedAddressCosmos InternalWeightedAddressCosmos) {
-	for _, element := range weightedAddressCosmos {
-		internalWeightedAddressCosmos = append(internalWeightedAddressCosmos, element)
-	}
-	return internalWeightedAddressCosmos
-}
-
-func (w InternalWeightedAddressCosmos) Len() int {
-	return len(w)
-}
-
-func (w InternalWeightedAddressCosmos) Less(i, j int) bool {
-	// TODO refactor
-	//return w[i].Difference.Amount.Uint64() < w[j].Difference.Amount.Uint64()
-	return false
-}
-
-func (w InternalWeightedAddressCosmos) Swap(i, j int) {
-	w[i], w[j] = w[j], w[i]
-}
-
-func (w InternalWeightedAddressCosmos) Sort() InternalWeightedAddressCosmos {
-	sort.Sort(w)
-	return w
-}
-
-func (w InternalWeightedAddressCosmos) Marshal() ([]byte, error) {
-	if w == nil {
-		return json.Marshal(InternalWeightedAddressCosmos{})
-	}
-	return json.Marshal(w)
-}
-
-func (w InternalWeightedAddressCosmos) Unmarshal(bz []byte) error {
-	err := json.Unmarshal(bz, &w)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (k Keeper) setCosmosValidatorParams(ctx sdk.Context, details InternalWeightedAddressCosmos) {
+func (k Keeper) setCosmosValidatorParams(ctx sdk.Context, details types.WeightedAddressAmounts) {
 	store := ctx.KVStore(k.storeKey)
-	key := []byte(cosmosTypes.KeyCosmosValidatorSet)
+	key := []byte(types.KeyCosmosValidatorSet)
 	if store.Has(key) {
 		bz, err := details.Sort().Marshal()
 		if err != nil {
@@ -64,7 +19,7 @@ func (k Keeper) setCosmosValidatorParams(ctx sdk.Context, details InternalWeight
 		}
 		store.Set(key, bz)
 	} else {
-		newWeightedAddress := ConvertToInternalWeightedAddressCosmos(k.GetParams(ctx).ValidatorSetCosmosChain)
+		newWeightedAddress := ConvertTotypes.WeightedAddressAmounts(k.GetParams(ctx).ValidatorSetCosmosChain)
 		bz, err := newWeightedAddress.Sort().Marshal()
 		if err != nil {
 			panic(err)
@@ -73,14 +28,14 @@ func (k Keeper) setCosmosValidatorParams(ctx sdk.Context, details InternalWeight
 	}
 }
 
-func (k Keeper) getCosmosValidatorParams(ctx sdk.Context) (internalWeightedAddressCosmos InternalWeightedAddressCosmos) {
+func (k Keeper) getCosmosValidatorParams(ctx sdk.Context) (types.WeightedAddressAmounts types.WeightedAddressAmounts) {
 	store := ctx.KVStore(k.storeKey)
-	bz := store.Get([]byte(cosmosTypes.KeyCosmosValidatorSet))
-	err := internalWeightedAddressCosmos.Unmarshal(bz)
+	bz := store.Get([]byte(types.KeyCosmosValidatorSet))
+	err := types.WeightedAddressAmounts.Unmarshal(bz)
 	if err != nil {
 		panic(err)
 	}
-	return internalWeightedAddressCosmos
+	return types.WeightedAddressAmounts
 }
 
 func (k Keeper) updateCosmosValidatorStakingParams(ctx sdk.Context, msgs []sdk.Msg) error {
@@ -98,8 +53,8 @@ func (k Keeper) updateCosmosValidatorStakingParams(ctx sdk.Context, msgs []sdk.M
 
 	k.setTotalDelegatedAmountTillDate(ctx, totalAmountInDelegateMsgs)
 
-	internalWeightedAddressCosmos := k.getCosmosValidatorParams(ctx)
-	for _, element := range internalWeightedAddressCosmos {
+	types.WeightedAddressAmounts := k.getCosmosValidatorParams(ctx)
+	for _, element := range types.WeightedAddressAmounts {
 		if val, ok := msgsMap[element.Address]; ok {
 			element.CurrentDelegatedAmount.Add(val.Amount)
 			// TODO refactor this, difference and ideal delegated amount was deleted.
@@ -109,7 +64,7 @@ func (k Keeper) updateCosmosValidatorStakingParams(ctx sdk.Context, msgs []sdk.M
 			//element.Difference = element.IdealDelegatedAmount.Sub(element.CurrentDelegatedAmount)
 		}
 	}
-	k.setCosmosValidatorParams(ctx, internalWeightedAddressCosmos)
+	k.setCosmosValidatorParams(ctx, types.WeightedAddressAmounts)
 	return nil
 	//TODO : Update c token ratio
 }
@@ -119,9 +74,60 @@ type ValAddressAndAmountForStakingAndUndelegating struct {
 	amount    sdk.Coin
 }
 
+func normalizedTokenDistribution(diffDistribution types.WeightedAddressAmounts) types.WeightedAddressAmounts {
+	// Find smallest diff less than zero
+	smallestVal := sdk.ZeroInt()
+	normalizedDistribution := map[string]sdk.Int{}
+
+	for addr, diff := range diffDistribution {
+		normalizedDistribution[addr] = diff
+		if diff.LT(smallestVal) {
+			smallestVal = diff
+		}
+	}
+	// Return early incase the smallest value is zero 
+	if smallestVal.Equal(sdk.ZeroInt()) {
+		return diffDistribution
+	}
+	// Normalize based on smallest diff
+	for addr, diff := range diffDistribution {
+		normalizedDistribution[addr] = diff.Sub(smallestVal)
+	}
+	return normalizedDistribution
+}
+
 // gives a list of all validators having weighted amount for few and 1uatom for rest in order to auto claim all rewards accumulated in current epoch
 func (k Keeper) fetchValidatorsToDelegate(ctx sdk.Context, amount sdk.Coin) []ValAddressAndAmountForStakingAndUndelegating {
-	//TODO : Add pseudo code for filtering out validators to delegate
+	params := k.GetParams(ctx)
+
+	// Return nil list if amount is less than delegation threshold
+	if amount.IsLT(params.DelegationThreshold) {
+		return nil
+	} 
+
+	validatorParams := k.getCosmosValidatorParams(ctx)
+	totalDelegations := validatorParams.TotalDelegations(params.StakingDenom)
+
+	curDiffDistribution := types.WeightedAddressAmounts{}
+
+	var idealTokens, curTokens sdk.Int
+	for _, valParam := range validatorParams {
+		idealTokens = sdk.Int(valParam.Weight.Mul(totalDelegations.Amount.ToDec()))
+		curTokens = valParam.CurrentDelegatedAmount.Amount
+
+		curDiffDistribution = append(curDiffDistribution, types.WeightedAddressCosmos{
+			Address: valParam.Address,
+			Weight: valParam.Weight,
+			CurrentDelegatedAmount: sdk.NewCoin(valParam.CurrentDelegatedAmount.Denom, idealTokens.Sub(curTokens)),
+		})
+		curDiffDistribution[valParam.Address] = idealTokens.Sub(curTokens)
+	}
+	curDiffDistribution = normalizedTokenDistribution(curDiffDistribution)
+	
+	// Get the top validators
+	sort.Sort(curDiffDistribution)
+	
+
 	return nil
 }
 
