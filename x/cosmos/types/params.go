@@ -48,7 +48,7 @@ func ParamKeyTable() paramsTypes.KeyTable {
 }
 
 func NewParams(minMintingAmount sdk.Coin, maxMintingAmount sdk.Coin, minBurningAmount sdk.Coin, maxBurningAmount sdk.Coin,
-	maxValidatorToDelegate uint64, validatorSetCosmosChain []WeightedAddressCosmos, validatorSetNativeChain []WeightedAddress,
+	maxValidatorToDelegate uint64, validatorSetCosmosChain []WeightedAddressAmount, validatorSetNativeChain []WeightedAddress,
 	weightedDeveloperRewardsReceivers []WeightedAddress, distributionProportion DistributionProportions, epochs int64,
 	maxIncomingAndOutgoingTxns int64, cosmosProposalParams CosmosChainProposalParams, stakingEpochIdentifier string,
 	custodialAddress string, undelegateEpochIdentifier string, ChunkSize int64, bondDenom []string, stakingDenom string, mintDenom string,
@@ -87,26 +87,30 @@ func DefaultParams() Params {
 		MinBurningAmount:       sdk.NewInt64Coin("uatom", 5000000),
 		MaxBurningAmount:       sdk.NewInt64Coin("uatom", 100000000000),
 		MaxValidatorToDelegate: 3,
-		ValidatorSetCosmosChain: []WeightedAddressCosmos{
+		ValidatorSetCosmosChain: []WeightedAddressAmount{
 			{
 				Address:                "cosmosvaloper1hcqg5wj9t42zawqkqucs7la85ffyv08le09ljt",
 				Weight:                 sdk.NewDecWithPrec(5, 1),
-				CurrentDelegatedAmount: sdk.NewInt64Coin("uatom", 0),
+				Denom: "uatom",
+				Amount: sdk.NewInt(0),
 			},
 			{
 				Address:                "cosmosvaloper1lcck2cxh7dzgkrfk53kysg9ktdrsjj6jfwlnm2",
 				Weight:                 sdk.NewDecWithPrec(2, 1),
-				CurrentDelegatedAmount: sdk.NewInt64Coin("uatom", 0),
+				Denom: "uatom",
+				Amount: sdk.NewInt(0),
 			},
 			{
 				Address:                "cosmosvaloper10khgeppewe4rgfrcy809r9h00aquwxxxgwgwa5",
 				Weight:                 sdk.NewDecWithPrec(1, 1),
-				CurrentDelegatedAmount: sdk.NewInt64Coin("uatom", 0),
+				Denom: "uatom",
+				Amount: sdk.NewInt(0),
 			},
 			{
 				Address:                "cosmosvaloper10vcqjzphfdlumas0vp64f0hruhrqxv0cd7wdy2",
 				Weight:                 sdk.NewDecWithPrec(2, 1),
-				CurrentDelegatedAmount: sdk.NewInt64Coin("uatom", 0),
+				Denom: "uatom",
+				Amount: sdk.NewInt(0),
 			},
 		},
 		ValidatorSetNativeChain: []WeightedAddress{
@@ -322,7 +326,7 @@ func validateMaxValidatorToDelegate(i interface{}) error {
 }
 
 func validateValidatorSetCosmosChain(i interface{}) error {
-	v, ok := i.([]WeightedAddressCosmos)
+	v, ok := i.([]WeightedAddressAmount)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
@@ -348,7 +352,7 @@ func validateValidatorSetCosmosChain(i interface{}) error {
 			return fmt.Errorf("more than 1 weight at %dth", i)
 		}
 		weightSum = weightSum.Add(w.Weight)
-		if w.CurrentDelegatedAmount.IsNegative() {
+		if w.Amount.IsNegative() {
 			return fmt.Errorf("non-positive current delegation amount at %dth", i)
 		}
 	}

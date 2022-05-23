@@ -15,10 +15,8 @@ message WeightedAddressAmount {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
   ];
-  cosmos.base.v1beta1.Coin coin = 3 [
-    (gogoproto.moretags) = "yaml:\"current_delegated_amount\"",
-    (gogoproto.nullable) = false
-  ];
+  string denom  = 3;
+  string amount = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int", (gogoproto.nullable) = false];
 }
 
 message WeightedAddress {

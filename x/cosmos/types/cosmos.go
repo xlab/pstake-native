@@ -7,44 +7,57 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+func (w WeightedAddressAmount) Coin() sdk.Coin {
+	return sdk.NewCoin(w.Denom, w.Amount)
+}
+
+func NewWeightedAddressAmount(address string, weight sdk.Dec, coin sdk.Coin) WeightedAddressAmount {
+	return WeightedAddressAmount{
+		Address: address,
+		Weight: weight,
+		Denom: coin.Denom,
+		Amount: coin.Amount,
+	}
+}
+
 type WeightedAddressAmounts []WeightedAddressAmount
 
 var _ sort.Interface = WeightedAddressAmounts{}
 
-func NewWeightedAddressAmounts(ws []WeightedAddressAmount) (WeightedAddressAmounts) {
-	w := WeightedAddressAmounts{}
-	for _, element := range ws {
-		w = append(w, element)
+func NewWeightedAddressAmounts(w []WeightedAddressAmount) (WeightedAddressAmounts) {
+	ws := WeightedAddressAmounts{}
+	for _, element := range w {
+		ws = append(ws, element)
 	}
 	return w
 }
 
-func (w WeightedAddressAmounts) Len() int {
-	return len(w)
+func (ws WeightedAddressAmounts) Len() int {
+	return len(ws)
 }
 
-func (w WeightedAddressAmounts) Less(i, j int) bool {
-	return w[i].Coin.Amount.LT(w[j].Coin.Amount)
+func (ws WeightedAddressAmounts) Less(i, j int) bool {
+	return ws[i].Amount.LT(ws[j].Amount)
 }
 
-func (w WeightedAddressAmounts) Swap(i, j int) {
-	w[i], w[j] = w[j], w[i]
+func (ws WeightedAddressAmounts) Swap(i, j int) {
+	ws[i], ws[j] = ws[j], ws[i]
 }
 
-func (w WeightedAddressAmounts) Sort() WeightedAddressAmounts {
-	sort.Sort(w)
-	return w
+func (ws WeightedAddressAmounts) Sort() WeightedAddressAmounts {
+	sort.Sort(ws)
+	return ws
 }
 
-func (w WeightedAddressAmounts) Marshal() ([]byte, error) {
-	if w == nil {
+func (ws WeightedAddressAmounts) Marshal() ([]byte, error) {
+	if ws == nil {
 		return json.Marshal(WeightedAddressAmounts{})
 	}
-	return json.Marshal(w)
+	return json.Marshal(ws)
 }
 
-func (w WeightedAddressAmounts) Unmarshal(bz []byte) error {
-	err := json.Unmarshal(bz, &w)
+func (ws WeightedAddressAmounts) Unmarshal(bz []byte) error {
+	err := json.Unmarshal(bz, &ws)
 	if err != nil {
 		return err
 	}
@@ -52,13 +65,21 @@ func (w WeightedAddressAmounts) Unmarshal(bz []byte) error {
 }
 
 // TotalAmount returns the total amount for a given denom
-func (w WeightedAddressAmounts) TotalAmount(denom string) sdk.Coin {
+func (ws WeightedAddressAmounts) TotalAmount(denom string) sdk.Coin {
 	total := sdk.NewCoin(denom, sdk.ZeroInt())
 	
-	for _, weightedAddr := range w {
-		if weightedAddr.Coin.Denom == denom {
-			total.Amount = total.Amount.Add(weightedAddr.Coin.Amount)
+	for _, weightedAddr := range ws {
+		if weightedAddr.Denom == denom {
+			total.Amount = total.Amount.Add(weightedAddr.Amount)
 		}
 	}
 	return total
+}
+
+func GetWeightedAddressMap(ws WeightedAddressAmounts) map[string]WeightedAddressAmount {
+	addressMap := map[string]WeightedAddressAmount{}
+	for _, w := range ws {
+		addressMap[w.Address] = w
+	}
+	return addressMap
 }
