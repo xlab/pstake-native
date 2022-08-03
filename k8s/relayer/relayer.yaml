@@ -28,7 +28,7 @@ spec:
         - name: test-docker-creds
       containers:
         - name: relayer
-          image: informalsystems/hermes:0.15.0
+          image: informalsystems/hermes:1.0.0-rc.1
           imagePullPolicy: Always
           env:
             - name: RELAYER_DIR
@@ -45,12 +45,22 @@ spec:
               CONFIG_FILE="$CONFIG.toml"
               echo "$CONFIG_FILE"
               cp /configs/$CONFIG_FILE $RELAYER_DIR/config.toml
-              # Starting
               cat $RELAYER_DIR/config.toml
-              for ((i=0; i<$(jq -r '.keys | length' /configs/keys.json); i++))
+              for ((i=0; i<$(jq -r ".chains | length" /configs/keys.json); i++))
               do
-                hermes keys restore --mnemonic "$(jq -r ".keys[$i].mnemonic" /configs/keys.json)" $(jq -r ".keys[$i].chainid" /configs/keys.json) -n $(jq -r ".keys[$i].name" /configs/keys.json)
+                jq -r ".chains[$i].keys[0]" /configs/keys.json > /tmp/key$i.json
+                hermes keys add \
+                  --chain $(jq -r ".chains[$i].id" /configs/keys.json) \
+                  --key-file /tmp/key$i.json \
+                  --hd-path $(jq -r ".chains[$i].hdpath" /configs/keys.json)
               done
+              
+              hermes create channel \
+                --a-chain $(jq -r ".chains[1].id" /configs/keys.json) \
+                --b-chain $(jq -r ".chains[0].id" /configs/keys.json) \
+                --a-port $(jq -r ".chains[1].port" /configs/keys.json) \
+                --b-port $(jq -r ".chains[0].port" /configs/keys.json) \
+                --new-client-connection --yes
               hermes start
           resources:
             limits:
