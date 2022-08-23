@@ -1,8 +1,7 @@
 #!/bin/bash
 
-DENOM="${DENOM:=uxprt}"
+DENOM="${DENOM:=stake}"
 CHAIN_DATA_DIR="${CHAIN_DATA_DIR:=.pstaked}"
-
 VALIDATOR_CONFIG="configs/validators.json"
 KEYS_CONFIG="configs/keys.json"
 
@@ -14,7 +13,7 @@ set -eu
 jq -r ".genesis[0].mnemonic" $VALIDATOR_CONFIG | $CHAIN_BIN init $CHAIN_ID --chain-id $CHAIN_ID --recover
 jq -r ".genesis[0].mnemonic" $VALIDATOR_CONFIG | $CHAIN_BIN keys add $(jq -r ".genesis[0].name" $VALIDATOR_CONFIG) --recover --keyring-backend="test"
 
-# Add keys to keyringg
+# Add keys to keyring
 for ((i=0; i<$(jq -r '.validators | length' $VALIDATOR_CONFIG); i++))
 do
   jq -r ".validators[$i].mnemonic" $VALIDATOR_CONFIG | $CHAIN_BIN keys add $(jq -r ".validators[$i].name" $VALIDATOR_CONFIG) --recover --keyring-backend="test"
@@ -25,7 +24,7 @@ do
   jq -r ".keys[$i].mnemonic" $KEYS_CONFIG | $CHAIN_BIN keys add $(jq -r ".keys[$i].name" $KEYS_CONFIG) --recover --keyring-backend="test"
 done
 
-# Provide genesis validator self deligations
+# Provide genesis validator self delegations
 $CHAIN_BIN add-genesis-account $($CHAIN_BIN keys show -a $(jq -r .genesis[0].name $VALIDATOR_CONFIG) --keyring-backend="test") $COINS --keyring-backend="test"
 
 # Give Validator addresses initial coins
@@ -62,7 +61,6 @@ sed -i -e 's/timeout_propose = "3s"/timeout_propose = "1s"/g' $HOME/$CHAIN_DATA_
 sed -i -e 's/index_all_keys = false/index_all_keys = true/g' $HOME/$CHAIN_DATA_DIR/config/config.toml
 
 echo "Update genesis.json file with updated local params"
-sed -i -e "s/stake/$DENOM/g" $HOME/$CHAIN_DATA_DIR/config/genesis.json
 
 jq -r '.app_state.staking.params.unbonding_time |= "30s"' $HOME/$CHAIN_DATA_DIR/config/genesis.json > /tmp/genesis.json; mv /tmp/genesis.json $HOME/$CHAIN_DATA_DIR/config/genesis.json
 jq -r '.app_state.slashing.params.downtime_jail_duration |= "6s"' $HOME/$CHAIN_DATA_DIR/config/genesis.json > /tmp/genesis.json; mv /tmp/genesis.json $HOME/$CHAIN_DATA_DIR/config/genesis.json
@@ -72,15 +70,5 @@ jq -r '.app_state.gov.voting_params.voting_period |= "30s"' $HOME/$CHAIN_DATA_DI
 jq -r '.app_state.gov.tally_params.quorum |= "0.000000000000000000"' $HOME/$CHAIN_DATA_DIR/config/genesis.json > /tmp/genesis.json; mv /tmp/genesis.json $HOME/$CHAIN_DATA_DIR/config/genesis.json
 jq -r '.app_state.gov.tally_params.threshold |= "0.000000000000000000"' $HOME/$CHAIN_DATA_DIR/config/genesis.json > /tmp/genesis.json; mv /tmp/genesis.json $HOME/$CHAIN_DATA_DIR/config/genesis.json
 jq -r '.app_state.gov.tally_params.veto_threshold |= "0.000000000000000000"' $HOME/$CHAIN_DATA_DIR/config/genesis.json > /tmp/genesis.json; mv /tmp/genesis.json $HOME/$CHAIN_DATA_DIR/config/genesis.json
-
-# Set wasm as permissioned or permissionless based on environment variable
-wasm_permission="Nobody"
-if [ $WASM_PERMISSIONLESS == "true" ]
-then
-  wasm_permission="Everybody"
-fi
-
-jq -r ".app_state.wasm.params.code_upload_access.permission |= \"${wasm_permission}\"" $HOME/$CHAIN_DATA_DIR/config/genesis.json > /tmp/genesis.json; mv /tmp/genesis.json $HOME/$CHAIN_DATA_DIR/config/genesis.json
-jq -r ".app_state.wasm.params.instantiate_default_permission |= \"${wasm_permission}\"" $HOME/$CHAIN_DATA_DIR/config/genesis.json > /tmp/genesis.json; mv /tmp/genesis.json $HOME/$CHAIN_DATA_DIR/config/genesis.json
 
 $CHAIN_BIN tendermint show-node-id
