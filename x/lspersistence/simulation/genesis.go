@@ -19,7 +19,7 @@ const (
 	unstakeFeeRate         = "unstake_fee_rate"
 	liquidBondDenom        = "liquid_bond_denom"
 	minLiquidStakingAmount = "min_liquid_staking_amount"
-	whitelistedValidator   = "whiteliqted_validator"
+	whitelistedValidator   = "whitelisted_validator"
 )
 
 func genUnstakeFeeRate(r *rand.Rand) sdk.Dec {
