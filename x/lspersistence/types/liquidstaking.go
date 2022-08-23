@@ -81,9 +81,9 @@ func (v LiquidValidator) GetStatus(activeCondition bool) ValidatorStatus {
 }
 
 // ActiveCondition checks the liquid validator could be active by below cases
-//- included on whitelist
-//- existed valid validator on staking module ( existed, not nil del shares and tokens, valid exchange rate)
-//- not tombstoned
+// - included on whitelist
+// - existed valid validator on staking module ( existed, not nil del shares and tokens, valid exchange rate)
+// - not tombstoned
 func ActiveCondition(validator stakingtypes.Validator, whitelisted bool, tombstoned bool) bool {
 	return whitelisted &&
 		!tombstoned &&

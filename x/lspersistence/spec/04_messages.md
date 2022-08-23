@@ -2,11 +2,13 @@
 
 # Messages
 
-Messages (Msg) are objects that trigger state transitions. Msgs are wrapped in transactions (Txs) that clients submit to the network. The Cosmos SDK wraps and unwraps `liquidstaking` module messages from transactions.
+Messages (Msg) are objects that trigger state transitions. Msgs are wrapped in transactions (Txs) that clients submit to
+the network. The Cosmos SDK wraps and unwraps `liquidstaking` module messages from transactions.
 
 ## MsgLiquidStake
 
-Liquid stake with an amount. A liquid staker is expected to receive a synthetic version of the native token `stkToken` at the current mint rate.
+Liquid stake with an amount. A liquid staker is expected to receive a synthetic version of the native token `stkToken`
+at the current mint rate.
 
 ```go
 type MsgLiquidStake struct {
@@ -17,7 +19,8 @@ type MsgLiquidStake struct {
 
 ### Validity Checks
 
-Validity checks are performed for `MsgLiquidStake` message. The transaction that is triggered with `MsgLiquidStake` fails if:
+Validity checks are performed for `MsgLiquidStake` message. The transaction that is triggered with `MsgLiquidStake`
+fails if:
 
 - The active liquid validators do not exist
 - The amount of coin denomination is different from the one defined in `StakingKeeper.BondDenom()`
@@ -27,7 +30,8 @@ Validity checks are performed for `MsgLiquidStake` message. The transaction that
 
 ## MsgLiquidUnstake
 
-Liquid unstake with an amount. A liquid staker is expected to receive native token that corresponds to the synthetic version of coin `stkToken` value.
+Liquid unstake with an amount. A liquid staker is expected to receive native token that corresponds to the synthetic
+version of coin `stkToken` value.
 
 ```go
 type MsgLiquidUnstake struct {
@@ -38,9 +42,10 @@ type MsgLiquidUnstake struct {
 
 ### Validity Checks
 
-Validity checks are performed for `MsgLiquidUnstake` message. The transaction that is triggered with `MsgLiquidUnstake` fails if:
+Validity checks are performed for `MsgLiquidUnstake` message. The transaction that is triggered with `MsgLiquidUnstake`
+fails if:
 
-- The active liquid validators do not exist 
+- The active liquid validators do not exist
 - The amount of coin denomination is different from the one defined in `params.LiquidBondDenom`
 - The liquid staker has insufficient amount of `stkTokens`; `params.UnstakeFeeRate` must be considered
 - Insufficient liquid tokens or balance in proxy account

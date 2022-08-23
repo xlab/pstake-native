@@ -17,7 +17,6 @@
 | EventTypeUnbondInactiveLiquidTokens | unbonding_amount        | {unbondAmount}                 |
 | EventTypeUnbondInactiveLiquidTokens | completion_time         | {completionTime}               |
 
-
 ## Handlers
 
 ### MsgLiquidStake

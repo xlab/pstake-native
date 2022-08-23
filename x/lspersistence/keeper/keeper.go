@@ -17,11 +17,11 @@ type Keeper struct {
 	cdc        codec.BinaryCodec
 	paramSpace paramtypes.Subspace
 
-	accountKeeper   types.AccountKeeper
-	bankKeeper      types.BankKeeper
-	stakingKeeper   types.StakingKeeper
-	distrKeeper     types.DistrKeeper
-	slashingKeeper  types.SlashingKeeper
+	accountKeeper  types.AccountKeeper
+	bankKeeper     types.BankKeeper
+	stakingKeeper  types.StakingKeeper
+	distrKeeper    types.DistrKeeper
+	slashingKeeper types.SlashingKeeper
 }
 
 // NewKeeper returns a liquidstaking keeper. It handles:
@@ -43,14 +43,14 @@ func NewKeeper(cdc codec.BinaryCodec, key sdk.StoreKey, paramSpace paramtypes.Su
 	}
 
 	return Keeper{
-		storeKey:        key,
-		cdc:             cdc,
-		paramSpace:      paramSpace,
-		accountKeeper:   accountKeeper,
-		bankKeeper:      bankKeeper,
-		stakingKeeper:   stakingKeeper,
-		distrKeeper:     distrKeeper,
-		slashingKeeper:  slashingKeeper,
+		storeKey:       key,
+		cdc:            cdc,
+		paramSpace:     paramSpace,
+		accountKeeper:  accountKeeper,
+		bankKeeper:     bankKeeper,
+		stakingKeeper:  stakingKeeper,
+		distrKeeper:    distrKeeper,
+		slashingKeeper: slashingKeeper,
 	}
 }
 

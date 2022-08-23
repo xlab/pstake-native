@@ -13,11 +13,14 @@ The `liquidstaking` module contains the following parameters:
 
 ## LiquidBondDenom
 
-The denomination of the token that liquid stakers receive after they liquid stake. It acts as staking representation. 
+The denomination of the token that liquid stakers receive after they liquid stake. It acts as staking representation.
 
 ## WhitelistedValidators
 
-It is a list of `WhitelistedValidator`. A list of whitelisted validator is defined in `params.WhitelistedValidators` and they are being governed and elected through governance process. `WhitelistedValidator` has validator operator address and target weight. A target weight is a value used for calculating the real weight considering the active status. It is calculated to zero when a liquid validator's status is inactive.
+It is a list of `WhitelistedValidator`. A list of whitelisted validator is defined in `params.WhitelistedValidators` and
+they are being governed and elected through governance process. `WhitelistedValidator` has validator operator address
+and target weight. A target weight is a value used for calculating the real weight considering the active status. It is
+calculated to zero when a liquid validator's status is inactive.
 
 ```go
 type WhitelistedValidator struct {
@@ -30,7 +33,11 @@ type WhitelistedValidator struct {
 
 ## UnstakeFeeRate
 
-It is the fee rate that liquid stakers pay when they liquid unstake. When liquid unstake is requested, unbonded by subtracting the UnstakeFeeRate from unbondingAmount, which remains the DelShares of LiquidStakingProxyAcc, increasing the value of netAmount and stkToken. Even if the `UnstakeFeeRate` is zero, a small loss may occur due to a decimal loss in the process of dividing the staking/unstaking amount into weight of liquid validators, which is also accumulated in the netAmount value like fee.
+It is the fee rate that liquid stakers pay when they liquid unstake. When liquid unstake is requested, unbonded by
+subtracting the UnstakeFeeRate from unbondingAmount, which remains the DelShares of LiquidStakingProxyAcc, increasing
+the value of netAmount and stkToken. Even if the `UnstakeFeeRate` is zero, a small loss may occur due to a decimal loss
+in the process of dividing the staking/unstaking amount into weight of liquid validators, which is also accumulated in
+the netAmount value like fee.
 
 ## MinLiquidStakingAmount
 
@@ -49,7 +56,10 @@ It is the maximum difference and required rate that triggers asset rebalancing (
 
 ## RewardTrigger
 
-It is the rate that triggers to withdraw rewards and re-stake amounts to active validators. Specifically, if the sum of balances including the withdrawn rewards, crumb, and the upcoming rewards of `LiquidStakingProxyAcc` exceeds the rate of `RewardTrigger` of the total `DelShares`, the rewards are automatically withdrawn and re-stake according to each validator's weight.
+It is the rate that triggers to withdraw rewards and re-stake amounts to active validators. Specifically, if the sum of
+balances including the withdrawn rewards, crumb, and the upcoming rewards of `LiquidStakingProxyAcc` exceeds the rate
+of `RewardTrigger` of the total `DelShares`, the rewards are automatically withdrawn and re-stake according to each
+validator's weight.
 
 ### LiquidStakingProxyAcc
 
