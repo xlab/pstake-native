@@ -69,7 +69,7 @@ func (v LiquidValidator) GetLiquidTokens(ctx sdk.Context, sk StakingKeeper, only
 func (v LiquidValidator) GetWeight(whitelistedValsMap WhitelistedValsMap, active bool) sdk.Int {
 	wv, ok := whitelistedValsMap[v.OperatorAddress]
 
-	if !ok {
+	if !ok || !active {
 		return sdk.ZeroInt()
 	}
 

@@ -1,8 +1,9 @@
 package types_test
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -24,13 +25,13 @@ min_liquid_staking_amount: "1000000"
 
 	params.WhitelistedValidators = []types.WhitelistedValidator{
 		{
-			ValidatorAddress: "persistencevaloper1xukct7canygptg26xkz079emzh9fs7a2fm2mpe",
+			ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
 			TargetWeight:     sdk.NewInt(10),
 		},
 	}
 	paramsStr = `liquid_bond_denom: bstake
 whitelisted_validators:
-- validator_address: persistencevaloper1xukct7canygptg26xkz079emzh9fs7a2fm2mpe
+- validator_address: cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv
   target_weight: "10"
 unstake_fee_rate: "0.001000000000000000"
 min_liquid_staking_amount: "1000000"
@@ -88,16 +89,16 @@ func TestValidateWhitelistedValidators(t *testing.T) {
 			func(params *types.Params) {
 				params.WhitelistedValidators = []types.WhitelistedValidator{
 					{
-						ValidatorAddress: "persistencevaloper1xukct7canygptg26xkz079emzh9fs7a2fm2mpe",
+						ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
 						TargetWeight:     sdk.NewInt(10),
 					},
 					{
-						ValidatorAddress: "persistencevaloper1xukct7canygptg26xkz079emzh9fs7a2fm2mpe",
+						ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
 						TargetWeight:     sdk.NewInt(10),
 					},
 				}
 			},
-			"liquidstaking validator cannot be duplicated: persistencevaloper1xukct7canygptg26xkz079emzh9fs7a2fm2mpe",
+			"liquidstaking validator cannot be duplicated: cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
 		},
 		{
 			"invalid whitelisted validator address",
@@ -116,7 +117,7 @@ func TestValidateWhitelistedValidators(t *testing.T) {
 			func(params *types.Params) {
 				params.WhitelistedValidators = []types.WhitelistedValidator{
 					{
-						ValidatorAddress: "persistencevaloper1xukct7canygptg26xkz079emzh9fs7a2fm2mpe",
+						ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
 						TargetWeight:     sdk.Int{},
 					},
 				}
@@ -128,7 +129,7 @@ func TestValidateWhitelistedValidators(t *testing.T) {
 			func(params *types.Params) {
 				params.WhitelistedValidators = []types.WhitelistedValidator{
 					{
-						ValidatorAddress: "persistencevaloper1xukct7canygptg26xkz079emzh9fs7a2fm2mpe",
+						ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
 						TargetWeight:     sdk.NewInt(-1),
 					},
 				}
@@ -140,7 +141,7 @@ func TestValidateWhitelistedValidators(t *testing.T) {
 			func(params *types.Params) {
 				params.WhitelistedValidators = []types.WhitelistedValidator{
 					{
-						ValidatorAddress: "persistencevaloper1xukct7canygptg26xkz079emzh9fs7a2fm2mpe",
+						ValidatorAddress: "cosmosvaloper10e4vsut6suau8tk9m6dnrm0slgd6npe3jx5xpv",
 						TargetWeight:     sdk.ZeroInt(),
 					},
 				}
