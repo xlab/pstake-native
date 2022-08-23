@@ -116,10 +116,9 @@ import (
 	lscosmosclient "github.com/persistenceOne/pstake-native/x/lscosmos/client"
 	lscosmoskeeper "github.com/persistenceOne/pstake-native/x/lscosmos/keeper"
 	lscosmostypes "github.com/persistenceOne/pstake-native/x/lscosmos/types"
+	"github.com/persistenceOne/pstake-native/x/lspersistence"
 	lspersistencekeeper "github.com/persistenceOne/pstake-native/x/lspersistence/keeper"
 	lspersistencetypes "github.com/persistenceOne/pstake-native/x/lspersistence/types"
-	lspersistence "github.com/persistenceOne/pstake-native/x/lspersistence"
-
 )
 
 var (
