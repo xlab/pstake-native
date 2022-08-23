@@ -9,11 +9,13 @@ import (
 type WhitelistedValsMap map[string]WhitelistedValidator
 
 func (whitelistedValsMap WhitelistedValsMap) IsListed(operatorAddr string) bool {
-	if _, ok := whitelistedValsMap[operatorAddr]; ok {
-		return true
-	} else {
+	_, ok := whitelistedValsMap[operatorAddr]
+
+	if !ok {
 		return false
 	}
+
+	return ok
 }
 
 func GetWhitelistedValsMap(whitelistedValidators []WhitelistedValidator) WhitelistedValsMap {
@@ -65,19 +67,21 @@ func (v LiquidValidator) GetLiquidTokens(ctx sdk.Context, sk StakingKeeper, only
 }
 
 func (v LiquidValidator) GetWeight(whitelistedValsMap WhitelistedValsMap, active bool) sdk.Int {
-	if wv, ok := whitelistedValsMap[v.OperatorAddress]; ok && active {
-		return wv.TargetWeight
-	} else {
+	wv, ok := whitelistedValsMap[v.OperatorAddress]
+
+	if !ok {
 		return sdk.ZeroInt()
 	}
+
+	return wv.TargetWeight
 }
 
 func (v LiquidValidator) GetStatus(activeCondition bool) ValidatorStatus {
-	if activeCondition {
-		return ValidatorStatusActive
-	} else {
+	if !activeCondition {
 		return ValidatorStatusInactive
 	}
+
+	return ValidatorStatusActive
 }
 
 // ActiveCondition checks the liquid validator could be active by below cases

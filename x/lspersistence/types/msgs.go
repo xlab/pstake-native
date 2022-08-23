@@ -17,6 +17,8 @@ const (
 )
 
 // NewMsgLiquidStake creates a new MsgLiquidStake.
+//
+//nolint:interfacer
 func NewMsgLiquidStake(
 	liquidStaker sdk.AccAddress,
 	amount sdk.Coin,
@@ -65,6 +67,8 @@ func (msg MsgLiquidStake) GetDelegator() sdk.AccAddress {
 }
 
 // NewMsgLiquidUnstake creates a new MsgLiquidUnstake.
+//
+//nolint:interfacer
 func NewMsgLiquidUnstake(
 	liquidStaker sdk.AccAddress,
 	amount sdk.Coin,

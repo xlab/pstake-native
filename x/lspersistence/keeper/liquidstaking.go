@@ -127,6 +127,8 @@ func (k Keeper) LiquidDelegate(ctx sdk.Context, proxyAcc sdk.AccAddress, activeV
 }
 
 // LiquidUnstake burns unstakingBtoken and performs LiquidUnbond to active liquid validators with del shares worth of shares according to NetAmount with each validators current weight.
+//
+//nolint:prealloc
 func (k Keeper) LiquidUnstake(
 	ctx sdk.Context, proxyAcc, liquidStaker sdk.AccAddress, unstakingBtoken sdk.Coin,
 ) (time.Time, sdk.Int, []stakingtypes.UnbondingDelegation, sdk.Int, error) {
@@ -171,18 +173,17 @@ func (k Keeper) LiquidUnstake(
 
 	// if no totalLiquidTokens, withdraw directly from balance of proxy acc
 	if !totalLiquidTokens.IsPositive() {
-		if nas.ProxyAccBalance.GTE(unbondingAmountInt) {
-			err = k.bankKeeper.SendCoins(ctx, types.LiquidStakingProxyAcc, liquidStaker,
-				sdk.NewCoins(sdk.NewCoin(k.stakingKeeper.BondDenom(ctx), unbondingAmountInt)))
-			if err != nil {
-				return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), err
-			} else {
-				return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, unbondingAmountInt, nil
-			}
-		} else {
-			// error case where there is a quantity that are unbonding balance or remaining rewards that is not re-stake or withdrawn in netAmount.
+		if !nas.ProxyAccBalance.GTE(unbondingAmountInt) {
 			return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), types.ErrInsufficientProxyAccBalance
 		}
+
+		err = k.bankKeeper.SendCoins(ctx, types.LiquidStakingProxyAcc, liquidStaker,
+			sdk.NewCoins(sdk.NewCoin(k.stakingKeeper.BondDenom(ctx), unbondingAmountInt)))
+		if err != nil {
+			return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, sdk.ZeroInt(), err
+		}
+
+		return time.Time{}, sdk.ZeroInt(), []stakingtypes.UnbondingDelegation{}, unbondingAmountInt, nil
 	}
 	// fail when no liquid validators to unbond
 	if liquidVals.Len() == 0 {

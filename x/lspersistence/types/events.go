@@ -1,6 +1,8 @@
 package types
 
 // Event types for the liquidstaking module.
+//
+//nolint:gosec
 const (
 	EventTypeMsgLiquidStake             = TypeMsgLiquidStake
 	EventTypeMsgLiquidUnstake           = TypeMsgLiquidUnstake

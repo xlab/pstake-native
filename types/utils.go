@@ -213,10 +213,10 @@ func SafeMath(f, onOverflow func()) {
 
 // IsOverflow returns true if the panic value can be interpreted as an overflow.
 func IsOverflow(r interface{}) bool {
-	switch r := r.(type) {
-	case string:
-		s := strings.ToLower(r)
+	if str, ok := r.(string); ok {
+		s := strings.ToLower(str)
 		return strings.Contains(s, "overflow") || strings.HasSuffix(s, "out of bound")
 	}
+
 	return false
 }

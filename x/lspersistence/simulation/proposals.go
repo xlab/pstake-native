@@ -16,6 +16,8 @@ import (
 )
 
 // Simulation operation weights constants.
+//
+//nolint:gosec,false-positive
 const (
 	OpWeightSimulateAddWhitelistValidatorsProposal    = "op_weight_add_whitelist_validators_proposal"
 	OpWeightSimulateUpdateWhitelistValidatorsProposal = "op_weight_update_whitelist_validators_proposal"
@@ -139,13 +141,15 @@ func SimulateCompleteRedelegationUnbonding(sk types.StakingKeeper) simtypes.Cont
 }
 
 // SimulateTallyWithLiquidStaking mocking tally for SetLiquidStakingVotingPowers.
+//
+//nolint:interfacer
 func SimulateTallyWithLiquidStaking(ak types.AccountKeeper, bk types.BankKeeper, gk types.GovKeeper) simtypes.ContentSimulatorFn {
 	return func(r *rand.Rand, ctx sdk.Context, accs []simtypes.Account) simtypes.Content {
 		proposals := gk.GetProposals(ctx)
 		var targetProposal *govtypes.Proposal
-		for _, p := range proposals {
-			if p.Status == govtypes.StatusVotingPeriod {
-				targetProposal = &p
+		for i := range proposals {
+			if proposals[i].Status == govtypes.StatusVotingPeriod {
+				targetProposal = &proposals[i]
 				break
 			}
 		}

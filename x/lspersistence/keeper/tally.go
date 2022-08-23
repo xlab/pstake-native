@@ -96,9 +96,9 @@ func (k Keeper) CalcLiquidStakingVotingPower(ctx sdk.Context, addr sdk.AccAddres
 		}
 	}
 
-	if bTokenAmount.IsPositive() {
-		return types.BTokenToNativeToken(bTokenAmount, bTokenTotalSupply, totalBondedLiquidTokens.ToDec()).TruncateInt()
-	} else {
+	if !bTokenAmount.IsPositive() {
 		return sdk.ZeroInt()
 	}
+
+	return types.BTokenToNativeToken(bTokenAmount, bTokenTotalSupply, totalBondedLiquidTokens.ToDec()).TruncateInt()
 }
