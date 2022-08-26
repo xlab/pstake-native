@@ -96,6 +96,9 @@ import (
 	ibchost "github.com/cosmos/ibc-go/v3/modules/core/24-host"
 	ibckeeper "github.com/cosmos/ibc-go/v3/modules/core/keeper"
 	"github.com/gorilla/mux"
+	"github.com/persistenceOne/persistence-sdk/x/ibchooker"
+	ibchookerkeeper "github.com/persistenceOne/persistence-sdk/x/ibchooker/keeper"
+	ibchookertypes "github.com/persistenceOne/persistence-sdk/x/ibchooker/types"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cast"
 	"github.com/strangelove-ventures/packet-forward-middleware/v2/router"
@@ -154,6 +157,7 @@ var (
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
 		transfer.AppModuleBasic{},
+		ibchooker.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		router.AppModuleBasic{},
 		ica.AppModuleBasic{},
@@ -226,6 +230,7 @@ type PstakeApp struct {
 	ICAControllerKeeper icacontrollerkeeper.Keeper
 	EvidenceKeeper      evidencekeeper.Keeper
 	TransferKeeper      ibctransferkeeper.Keeper
+	TransferHooksKeeper ibchookerkeeper.Keeper
 	FeeGrantKeeper      feegrantkeeper.Keeper
 	AuthzKeeper         authzkeeper.Keeper
 	RouterKeeper        routerkeeper.Keeper
@@ -470,17 +475,25 @@ func NewpStakeApp(
 		app.TransferKeeper,
 		app.ICAControllerKeeper,
 		scopedLSCosmosKeeper,
+		app.MsgServiceRouter(),
 	)
-	lscosmosModule := lscosmos.NewAppModule(appCodec, app.LSCosmosKeeper, app.AccountKeeper, app.BankKeeper)
-	icaControllerIBCModule := icacontroller.NewIBCModule(app.ICAControllerKeeper, lscosmosModule)
+	ibcTransferHooksKeeper := ibchookerkeeper.NewKeeper()
+	app.TransferHooksKeeper = *ibcTransferHooksKeeper.SetHooks(ibchookertypes.NewMultiStakingHooks(app.LSCosmosKeeper.NewIBCTransferHooks()))
+	ibcTransferHooksMiddleware := ibchooker.NewAppModule(app.TransferHooksKeeper, transferIBCModule)
 
 	app.RouterKeeper = routerkeeper.NewKeeper(appCodec, keys[routertypes.StoreKey], app.GetSubspace(routertypes.ModuleName), app.TransferKeeper, app.DistrKeeper)
 
+	// Information will flow: ibc-port -> icaController -> lscosmos.
+	lscosmosModule := lscosmos.NewAppModule(appCodec, app.LSCosmosKeeper, app.AccountKeeper, app.BankKeeper)
+	icaControllerIBCModule := icacontroller.NewIBCModule(app.ICAControllerKeeper, lscosmosModule)
+
+	// This module is not being used for any routing, can be removed, only part of ModuleManager.
+	// using ibcTransferHooksMiddleware instead.
 	routerModule := router.NewAppModule(app.RouterKeeper, transferIBCModule)
 	// create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter()
 	ibcRouter.AddRoute(icahosttypes.SubModuleName, icaHostIBCModule).
-		AddRoute(ibctransfertypes.ModuleName, transferIBCModule).
+		AddRoute(ibctransfertypes.ModuleName, ibcTransferHooksMiddleware).
 		AddRoute(icacontrollertypes.SubModuleName, icaControllerIBCModule).
 		AddRoute(lscosmostypes.ModuleName, icaControllerIBCModule)
 
@@ -517,7 +530,7 @@ func NewpStakeApp(
 	app.EvidenceKeeper = *evidenceKeeper
 
 	app.EpochsKeeper.SetHooks(
-		epochstypes.NewMultiEpochHooks(),
+		epochstypes.NewMultiEpochHooks(app.LSCosmosKeeper.NewEpochHooks()),
 	)
 
 	skipGenesisInvariants := cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants))
@@ -549,10 +562,11 @@ func NewpStakeApp(
 		params.NewAppModule(app.ParamsKeeper),
 		epochs.NewAppModule(appCodec, app.EpochsKeeper),
 		lspersistence.NewAppModule(appCodec, app.LSPersistenceKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GovKeeper),
-		lscosmos.NewAppModule(appCodec, app.LSCosmosKeeper, app.AccountKeeper, app.BankKeeper),
 		transferModule,
+		ibcTransferHooksMiddleware,
 		icaModule,
 		routerModule,
+		lscosmosModule,
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -585,6 +599,7 @@ func NewpStakeApp(
 		feegrant.ModuleName,
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
+		ibchookertypes.ModuleName, //Noop
 	)
 	app.mm.SetOrderEndBlockers(
 		crisistypes.ModuleName,
@@ -610,6 +625,7 @@ func NewpStakeApp(
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
+		ibchookertypes.ModuleName, //Noop
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -643,6 +659,7 @@ func NewpStakeApp(
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
+		ibchookertypes.ModuleName, //Noop
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -670,8 +687,8 @@ func NewpStakeApp(
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
 		lspersistence.NewAppModule(appCodec, app.LSPersistenceKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GovKeeper),
-		lscosmos.NewAppModule(appCodec, app.LSCosmosKeeper, app.AccountKeeper, app.BankKeeper),
 		transferModule,
+		// ibcTransferHooksMiddleware, TODO implement simulationModule interface
 		//icaModule,
 		lscosmosModule,
 	)
