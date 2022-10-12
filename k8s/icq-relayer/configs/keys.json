@@ -3,7 +3,7 @@
     {
       "keyname": "perKey",
       "name": "persistence",
-      "id": "pstaked-1",
+      "id": "persistencecore-1",
       "hdpath": "m/44'/118'/0'/0/0",
       "port": "transfer",
       "keys": [

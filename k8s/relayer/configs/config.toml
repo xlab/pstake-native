@@ -96,9 +96,9 @@ port = 3001
 
 [[chains]]
 id = 'gaiad-1'
-rpc_addr = 'http://gaia-genesis.dev-native.svc.cluster.local:26657'
-grpc_addr = 'http://gaia-genesis.dev-native.svc.cluster.local:9090'
-websocket_addr = 'ws://gaia-genesis.dev-native.svc.cluster.local:26657/websocket'
+rpc_addr = 'http://gaia-genesis.dev-core.svc.cluster.local:26657'
+grpc_addr = 'http://gaia-genesis.dev-core.svc.cluster.local:9090'
+websocket_addr = 'ws://gaia-genesis.dev-core.svc.cluster.local:26657/websocket'
 rpc_timeout = '10s'
 account_prefix = 'cosmos'
 key_name = 'cosmos'
@@ -116,10 +116,10 @@ trust_threshold = { numerator = '1', denominator = '3' }
 address_type = { derivation = 'cosmos' }
 
 [[chains]]
-id = 'pstaked-1'
-rpc_addr = 'http://pstake-genesis.dev-native.svc.cluster.local:26657'
-grpc_addr = 'http://pstake-genesis.dev-native.svc.cluster.local:9090'
-websocket_addr = 'ws://pstake-genesis.dev-native.svc.cluster.local:26657/websocket'
+id = 'persistencecore-1'
+rpc_addr = 'http://persistencecore-genesis.dev-core.svc.cluster.local:26657'
+grpc_addr = 'http://persistencecore-genesis.dev-core.svc.cluster.local:9090'
+websocket_addr = 'ws://persistencecore-genesis.dev-core.svc.cluster.local:26657/websocket'
 rpc_timeout = '10s'
 account_prefix = 'persistence'
 key_name = 'persistence'

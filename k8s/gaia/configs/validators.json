@@ -41,6 +41,13 @@
         "key": "A0Iv3dQ0RFENodXd3civXu6pgdfqPnMB9Ss5W5y9gdSc"
       },
       "mnemonic": "crunch armed fatal agent fat daughter shed draft hundred skin wheat maid dice please universe elbow start fantasy reopen paper relief tumble ability holiday\n"
+    },
+    {
+      "name": "cosmos",
+      "type": "local",
+      "address": "cosmos1d9fylz3mgxw2x33thvw3kg6eymuxzqwd38tx35",
+      "pubkey": "{\"@type\":\"/cosmos.crypto.secp256k1.PubKey\",\"key\":\"Aumqzi9se6XFoejFZaOVhYo7lHExAqUrBiIn0daH2Mi6\"}",
+      "mnemonic": "monitor size panic second inform stock trophy grit sustain refuse render heart midnight sport wise exile pumpkin pole letter harvest spell crater move salad"
     }
   ]
 }

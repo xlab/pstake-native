@@ -75,21 +75,21 @@ kubectl config use-context kind-kind
     ```
     namespace: default
     ```
-  Note : You have to change it at all the places where this namespace is used. Ex: http://gaia-genesis.dev-native.svc.cluster.local used in validator.yml
+  Note : You have to change it at all the places where this namespace is used. Ex: http://gaia-genesis.dev-core.svc.cluster.local used in validator.yml
 - Second way is to make a new namespace by using :
    ```commandline
-   kubectl create namespace dev-native
+   kubectl create namespace dev-core
    ```
   And then adding namespace in ~/.kube/config/<kube-config>.yaml of `cluster: kind-kind`
    ```
-   namespace: dev-native
+   namespace: dev-core
    ```
   So that when you use `kubectl config view`, context looks like :
    ```
    contexts:
    - context:
        cluster: kind-kind
-       namespace: dev-native
+       namespace: dev-core
        user: kind-kind
      name: kind-kind 
    ```

@@ -1,4 +1,4 @@
-namespace: dev-native
+namespace: dev-core
 
 resources:
 - relayer.yml

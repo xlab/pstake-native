@@ -56,14 +56,18 @@ spec:
           imagePullPolicy: Always
           env:
             - name: GENESIS_HOST
-              value: gaia-genesis.dev-native
+              value: gaia-genesis
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: GENESIS_PORT
               value: "8081"
           command:
             - bash
             - "-c"
             - |
-              while [ $(curl -sw '%{http_code}' http://gaia-genesis.dev-native.svc.cluster.local:8081/node_id -o /dev/null) -ne 200 ]; do
+              while [ $(curl -sw '%{http_code}' http://$GENESIS_HOST.$NAMESPACE.svc.cluster.local:8081/node_id -o /dev/null) -ne 200 ]; do
                 echo "Genesis validator does not seem to be ready. Waiting for it to start..."
                 sleep 10;
               done
@@ -98,7 +102,7 @@ spec:
               jq -r ".validators[$VAL_INDEX].mnemonic" /configs/validators.json | gaiad init gaia --chain-id $CHAIN_ID --home $GAIA_DIR --recover
               jq -r ".validators[$VAL_INDEX].mnemonic" /configs/validators.json | gaiad keys add $VAL_NAME --recover --keyring-backend='test' --home $GAIA_DIR
 
-              curl http://gaia-genesis.dev-native.svc.cluster.local:8081/genesis -o $GAIA_DIR/config/genesis.json
+              curl http://gaia-genesis.dev-core.svc.cluster.local:8081/genesis -o $GAIA_DIR/config/genesis.json
               echo "Genesis file that we got....."
               cat $GAIA_DIR/config/genesis.json
 
@@ -107,7 +111,7 @@ spec:
 
               echo "Fetching genesis file"
 
-              GENESIS_NODE_P2P=$(curl -s http://gaia-genesis.dev-native.svc.cluster.local:8081/node_id)@gaia-genesis.dev-native.svc.cluster.local:26656
+              GENESIS_NODE_P2P=$(curl -s http://gaia-genesis.dev-core.svc.cluster.local:8081/node_id)@gaia-genesis.dev-core.svc.cluster.local:26656
               echo "Node P2P: $GENESIS_NODE_P2P"
               sed -i "s/persistent_peers = \"\"/persistent_peers = \"$GENESIS_NODE_P2P\"/g" $GAIA_DIR/config/config.toml
               sed -i 's#"tcp://127.0.0.1:26657"#"tcp://0.0.0.0:26657"#g' $GAIA_DIR/config/config.toml
@@ -118,7 +122,7 @@ spec:
               echo "Printing the whole config.toml file"
               cat $GAIA_DIR/config/config.toml
 
-              curl -s http://gaia-genesis.dev-native.svc.cluster.local:8081/pub_key
+              curl -s http://gaia-genesis.dev-core.svc.cluster.local:8081/pub_key
           resources:
             limits:
               cpu: "0.2"

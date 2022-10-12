@@ -1,11 +1,11 @@
-namespace: dev-native
+namespace: dev-core
 
 resources:
   - service.yml
   - configmap.yml
   - genesis.yml
   - validator.yml
-  - ingress.yml
+  #- ingress.yml
 
 generatorOptions:
   disableNameSuffixHash: true

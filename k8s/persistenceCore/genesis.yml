@@ -90,7 +90,7 @@ spec:
             - mountPath: /configs
               name: addresses
         - name: init-genesis
-          image: persistenceone/persistencecorev3v4:latest
+          image: persistenceone/persistencecore:v3v4
           imagePullPolicy: Always
           env:
             - name: COINS
@@ -184,7 +184,7 @@ spec:
               name: addresses
       containers:
         - name: validator
-          image: persistenceone/persistencecorev3v4:latest
+          image: persistenceone/persistencecore:v3v4
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
