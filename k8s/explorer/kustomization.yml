@@ -3,7 +3,7 @@ namespace: dev-core
 resources:
   - configmap.yml
   - explorer.yml
-  - ingress.yml
+  #- ingress.yml
 
 generatorOptions:
   disableNameSuffixHash: true

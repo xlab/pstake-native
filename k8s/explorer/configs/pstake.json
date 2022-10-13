@@ -1,19 +1,24 @@
 {
-  "chain_name": "pstake",
+  "chain_name": "persistenceCore",
   "coingecko": "persistence",
-  "api": "https://rest.devnet.persistence.pstake.finance:443",
-  "rpc": ["https://rpc.devnet.persistence.pstake.finance:443", "https://rpc.devnet.persistence.pstake.finance:443"],
+  "api": "http://persistence-genesis.dev-core.svc.cluster.local:1317",
+  "rpc": [
+    "http://persistence-genesis.dev-core.svc.cluster.local:26657",
+    "http://persistence-genesis.dev-core.svc.cluster.local:26657"
+  ],
   "snapshot_provider": "",
   "sdk_version": "0.45.6",
   "coin_type": "118",
   "min_tx_fee": "3000",
   "addr_prefix": "persistence",
   "logo": "",
-  "assets": [{
-    "base": "uxprt",
-    "symbol": "XPRT",
-    "exponent": "6",
-    "coingecko_id": "persistence",
-    "logo": ""
-  }]
+  "assets": [
+    {
+      "base": "uxprt",
+      "symbol": "XPRT",
+      "exponent": "6",
+      "coingecko_id": "persistence",
+      "logo": ""
+    }
+  ]
 }

@@ -53,7 +53,6 @@ spec:
                   --hd-path $(jq -r ".chains[$i].hdpath" /configs/keys.json)
               done
               
-              sleep 100000000000000000
               hermes create channel \
                 --a-chain $(jq -r ".chains[1].id" /configs/keys.json) \
                 --b-chain $(jq -r ".chains[0].id" /configs/keys.json) \

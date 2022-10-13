@@ -12,7 +12,14 @@ apply-all:
 	$(MAKE) apply PROCESS=persistenceCore
 	$(MAKE) apply PROCESS=gaia
 	$(MAKE) apply PROCESS=relayer
+	$(MAKE) apply PROCESS=explorer
 	#$(MAKE) apply PROCESS=persistenceCore
+
+delete-all:
+	-$(MAKE) delete PROCESS=persistenceCore
+	-$(MAKE) delete PROCESS=gaia
+	-$(MAKE) delete PROCESS=relayer
+	-$(MAKE) apply PROCESS=explorer
 
 # debug:
     # port-forward

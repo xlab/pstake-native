@@ -4,9 +4,10 @@ CHAIN_BIN="${CHAIN_BIN:=persistenceCore}"
 DENOM="${DENOM:=uxprt}"
 CHAIN_DATA_DIR="${CHAIN_DATA_DIR:=.persistenceCore}"
 CHAIN_ID="${CHAIN_ID:=persistencecore-1}"
+NODE_HOST="${NODE_HOST:=localhost}"
+NODE_PORT="${NODE_PORT:=26657}"
 
-VALIDATOR_CONFIG="../../k8s/persistenceCore/configs/validators.json"
-KEYS_CONFIG="../../k8s/persistenceCore/configs/keys.json"
+VALIDATOR_CONFIG="${VALIDATOR_CONFIG:=../../k8s/persistenceCore/configs/validators.json}"
 
 set -eu
 
@@ -23,5 +24,6 @@ sed -i -e 's#keyring-backend = "os"#keyring-backend = "test"#g' $HOME/$CHAIN_DAT
 sed -i -e 's#output = "text"#output = "json"#g' $HOME/$CHAIN_DATA_DIR/config/client.toml
 sed -i -e 's#broadcast-mode = "sync"#broadcast-mode = "block"#g' $HOME/$CHAIN_DATA_DIR/config/client.toml
 sed -i -e "s#chain-id = \"\"#chain-id = \"$CHAIN_ID\"#g" $HOME/$CHAIN_DATA_DIR/config/client.toml
+sed -i -e "s#node = \".*\"#node = \"tcp://$NODE_HOST:$NODE_PORT\"#g" $HOME/$CHAIN_DATA_DIR/config/client.toml
 
 $CHAIN_BIN status 2>&1 | jq
