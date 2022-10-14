@@ -1,6 +1,6 @@
 PROCESS=persistenceCore
 
-all: delete apply
+all: delete-all apply-all
 
 apply:
 	kubectl apply -k $(PROCESS)
@@ -19,11 +19,4 @@ delete-all:
 	-$(MAKE) delete PROCESS=persistenceCore
 	-$(MAKE) delete PROCESS=gaia
 	-$(MAKE) delete PROCESS=relayer
-	-$(MAKE) apply PROCESS=explorer
-
-# debug:
-    # port-forward
-    # init -genesis
-    # get seeds - by calling exposer
-    # get genesis and paste in .$BINARY folder
-    #
+	-$(MAKE) delete PROCESS=explorer

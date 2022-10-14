@@ -24,9 +24,9 @@ cat << EOF > /tmp/update_proposal.json
 EOF
 
 echo "### Checking if proposal already passed"
-LOOKUP_PROPOSAL=$($CHAIN_BIN q gov proposals | jq "last(.proposals[] | select(.content.title == $(cat /tmp/update_proposal.json | jq .title))) ")
+LOOKUP_PROPOSAL=$($CHAIN_BIN q gov proposals | jq "last(.proposals[] | select(.content.title == $(cat /tmp/update_proposal.json | jq .title)))")
 
-if [[ -z $LOOKUP_PROPOSAL ]]; then
+if [[ -z $LOOKUP_PROPOSAL ]] || [[ $LOOKUP_PROPOSAL == "null" ]]; then
   echo "### Submit proposal from val4"
   RESP=$($CHAIN_BIN tx gov submit-proposal pstake-lscosmos-change-pstake-fee-address \
     /tmp/update_proposal.json -y --from val4 --fees 2000uxprt --gas auto --gas-adjustment 1.5 -b block -o json)

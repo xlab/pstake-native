@@ -24,6 +24,29 @@ spec:
     spec:
       imagePullSecrets:
         - name: test-docker-creds
+      initContainers:
+        - name: wait-for-genesis
+          image: persistenceone/persistencecore:v3v4
+          imagePullPolicy: Always
+          env:
+            - name: GENESIS_HOST
+              value: persistencecore-genesis
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: GENESIS_PORT
+              value: "8081"
+          command:
+            - bash
+            - "-c"
+            - |
+              while [ $(curl -sw '%{http_code}' http://$GENESIS_HOST.$NAMESPACE.svc.cluster.local:8081/node_id -o /dev/null) -ne 200 ]; do
+                echo "Genesis validator does not seem to be ready. Waiting for it to start..."
+                sleep 10;
+              done
+              echo "Ready to start"
+              exit 0
       containers:
         - name: relayer
           image: informalsystems/hermes:1.0.0

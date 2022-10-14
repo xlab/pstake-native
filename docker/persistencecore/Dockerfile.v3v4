@@ -10,7 +10,8 @@ ENV CHAIN_NAME=${CHAIN_NAME:-"persistence"}
 ENV CHAIN_BIN=${CHAIN_BIN:-"persistenceCore"}
 ENV CHAIN_VERSION=${CHAIN_VERSION:-"3.1.2"}
 ENV CODE_REF=${CODE_REF:-"https://github.com/persistenceOne/persistenceCore/archive/refs"}
-ENV UPGRADE_BRANCH=${UPGRADE_BRANCH:-"puneet/pstake"}
+ENV UPGRADE_BRANCH=${UPGRADE_BRANCH:-"anmol/v4-testing"}
+ENV UPGRADE_ZIP_NAME="v4-testing"
 
 # Set up dependencies
 ENV PACKAGES curl make git libusb-dev libc-dev bash gcc linux-headers eudev-dev python3
@@ -43,9 +44,9 @@ RUN LEDGER_ENABLED=false BUILD_TAGS="muslc linkstatic" make build
 WORKDIR /usr/local/upgrade
 
 # Build for after upgrade version
-ADD https://github.com/persistenceOne/persistenceCore/archive/refs/heads/puneet/pstake.zip /tmp
+ADD https://github.com/persistenceOne/persistenceCore/archive/refs/heads/${UPGRADE_BRANCH}.zip /tmp
 ADD $CODE_REF/heads/$UPGRADE_BRANCH.zip /tmp
-RUN cd /tmp && unzip pstake.zip && mv /tmp/${CHAIN_BIN}-puneet-pstake/* /usr/local/upgrade
+RUN cd /tmp && unzip ${UPGRADE_ZIP_NAME}.zip && mv /tmp/${CHAIN_BIN}-$(echo $UPGRADE_BRANCH | sed "s/\//-/")/* /usr/local/upgrade
 
 # Force it to use static lib (from above) not standard libgo_cosmwasm.so file
 RUN LEDGER_ENABLED=false BUILD_TAGS="muslc linkstatic" make build

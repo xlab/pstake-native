@@ -16,3 +16,6 @@ $CHAIN_BIN q bank balances $($CHAIN_BIN keys show val4 -a)
 
 echo "## Perform liquid staking txn"
 $CHAIN_BIN tx lscosmos liquid-stake 10000000$IBC_DENOM --from val3 -y
+
+echo "## Checking balance of account making ls txn"
+$CHAIN_BIN q bank balances $($CHAIN_BIN keys show val3 -a)
