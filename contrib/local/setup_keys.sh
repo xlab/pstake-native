@@ -19,11 +19,11 @@ do
   jq -r ".validators[$i].mnemonic" $VALIDATOR_CONFIG | $CHAIN_BIN keys add $(jq -r ".validators[$i].name" $VALIDATOR_CONFIG) --recover --keyring-backend="test"
 done
 
-echo "Update app.toml file"
-sed -i -e 's#keyring-backend = "os"#keyring-backend = "test"#g' $HOME/$CHAIN_DATA_DIR/config/client.toml
-sed -i -e 's#output = "text"#output = "json"#g' $HOME/$CHAIN_DATA_DIR/config/client.toml
-sed -i -e 's#broadcast-mode = "sync"#broadcast-mode = "block"#g' $HOME/$CHAIN_DATA_DIR/config/client.toml
-sed -i -e "s#chain-id = \"\"#chain-id = \"$CHAIN_ID\"#g" $HOME/$CHAIN_DATA_DIR/config/client.toml
+echo "Update client.toml file"
+sed -i -e 's#keyring-backend = ".*"#keyring-backend = "test"#g' $HOME/$CHAIN_DATA_DIR/config/client.toml
+sed -i -e 's#output = ".*"#output = "json"#g' $HOME/$CHAIN_DATA_DIR/config/client.toml
+sed -i -e 's#broadcast-mode = ".*"#broadcast-mode = "block"#g' $HOME/$CHAIN_DATA_DIR/config/client.toml
+sed -i -e "s#chain-id = \".*\"#chain-id = \"$CHAIN_ID\"#g" $HOME/$CHAIN_DATA_DIR/config/client.toml
 sed -i -e "s#node = \".*\"#node = \"tcp://$NODE_HOST:$NODE_PORT\"#g" $HOME/$CHAIN_DATA_DIR/config/client.toml
 
-$CHAIN_BIN status 2>&1 | jq
+$CHAIN_BIN status 2>&1
