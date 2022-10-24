@@ -13,7 +13,6 @@ apply-all:
 	$(MAKE) apply PROCESS=gaia
 	$(MAKE) apply PROCESS=relayer
 	$(MAKE) apply PROCESS=explorer
-	#$(MAKE) apply PROCESS=persistenceCore
 
 delete-all:
 	-$(MAKE) delete PROCESS=persistenceCore

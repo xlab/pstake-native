@@ -29,7 +29,8 @@ metadata:
   name: persistencecore-validator
 spec:
   serviceName: persistencecore-validator
-  replicas: 3
+  replicas: 6
+  podManagementPolicy: Parallel
   revisionHistoryLimit: 3
   selector:
     matchLabels:
@@ -52,7 +53,7 @@ spec:
         - name: test-docker-creds
       initContainers:
         - name: init-upgrade
-          image: persistenceone/persistencecore:v3v4-rc1
+          image: persistenceone/persistencecore:v4
           imagePullPolicy: Always
           env:
             - name: UPGRADE_NAME
@@ -66,9 +67,7 @@ spec:
             - "-c"
             - |
               mkdir -p /persistencecore/cosmovisor/genesis/bin
-              mkdir -p /persistencecore/cosmovisor/upgrades/$UPGRADE_NAME/bin
               cp /usr/bin/$ORIGINAL_CHAIN_BIN /persistencecore/cosmovisor/genesis/bin/persistencecore
-              cp /usr/bin/$UPGRADED_CHAIN_BIN /persistencecore/cosmovisor/upgrades/$UPGRADE_NAME/bin/persistencecore
           resources:
             limits:
               cpu: "0.2"
@@ -82,7 +81,7 @@ spec:
             - mountPath: /configs
               name: addresses
         - name: wait-for-genesis
-          image: persistenceone/persistencecore:v3v4-rc1
+          image: persistenceone/persistencecore:v4
           imagePullPolicy: Always
           env:
             - name: GENESIS_HOST
@@ -104,7 +103,7 @@ spec:
               echo "Ready to start"
               exit 0
         - name: init-validator
-          image: persistenceone/persistencecore:v3v4-rc1
+          image: persistenceone/persistencecore:v4
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
@@ -165,7 +164,7 @@ spec:
               name: addresses
       containers:
         - name: validator
-          image: persistenceone/persistencecore:v3v4-rc1
+          image: persistenceone/persistencecore:v4
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID

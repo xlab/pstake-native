@@ -23,6 +23,22 @@ setup-keys: setup-persistence-keys setup-gaia-keys
 
 clean-keys: clean-persistence-keys clean-gaia-keys
 
+## Port forward
+.PHONY: port-forward stop-forward check-forward
+port-forward:
+	kubectl port-forward pods/gaia-genesis-0 27657:26657 &
+	kubectl port-forward pods/persistencecore-genesis-0 26657:26657 &
+
+stop-forward:
+	-pkill -f "port-forward"
+
+check-forward:
+	while true; do \
+  		nc -vz 127.0.0.1 26657; \
+  		nc -vz 127.0.0.1 27657; \
+  		sleep 10; \
+  	done
+
 ## Upgrade commands
 
 pre-upgade:

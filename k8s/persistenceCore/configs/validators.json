@@ -43,6 +43,34 @@
       "mnemonic": "tag apart multiply food bleak isolate describe stand guide field session design cable combine excess shrug abuse pause course ketchup umbrella program labor ripple"
     },
     {
+      "name": "val5",
+      "type": "local",
+      "address": "persistence19u2ylhn2cfkzjc86u034v0z00ypm48f8c2prct",
+      "pubkey": "{\"@type\":\"/cosmos.crypto.secp256k1.PubKey\",\"key\":\"A4pIIFeCg3JutJrcoKPql7STODo7jSFpbTBniHOU1R4K\"}",
+      "mnemonic": "company odor produce hockey forward syrup monitor price unique grab pride brush autumn nice evolve lunch artist lumber village impulse identify strong hope chalk"
+    },
+    {
+      "name": "val6",
+      "type": "local",
+      "address": "persistence1hh8x0mw0tvy4xxssjh2c5s4mcjwxeql6xe98xz",
+      "pubkey": "{\"@type\":\"/cosmos.crypto.secp256k1.PubKey\",\"key\":\"Aj1Qc63ElqCdoUEHMWTTFywmOv4u71lpXR5+fJiGsNrE\"}",
+      "mnemonic": "affair reason tired hold bulk margin barely conduct connect merit bulk gas wear opinion produce twelve nerve cost network jacket visit insect warfare brass"
+    },
+    {
+      "name": "val7",
+      "type": "local",
+      "address": "persistence1st0hn7t68gnpujuvqthp3g4tc9u58k2xh5atx7",
+      "pubkey": "{\"@type\":\"/cosmos.crypto.secp256k1.PubKey\",\"key\":\"A7B9b+Dd/F/0pV18gMIe65zuuQLkXtnksurv2W+VHKiZ\"}",
+      "mnemonic": "delay master light laptop asset legal seat find coin night lyrics hair fruit fragile water naive bread result absent dizzy hungry mobile more attract"
+    },
+    {
+      "name": "val8",
+      "type": "local",
+      "address": "persistence1htax6xxa0s7heexevp4t0rxyml674lcav9grtj",
+      "pubkey": "{\"@type\":\"/cosmos.crypto.secp256k1.PubKey\",\"key\":\"AyiQkFTgVls3UGvGKpyBNp6DbnoQ8b28l3DvJ1uUI04z\"}",
+      "mnemonic": "quote frequent purse raise artefact fortune narrow heart acid great group swim phrase advice reunion carry century unusual body toddler pony muffin abuse fiction"
+    },
+    {
       "name": "persistence",
       "type": "local",
       "address": "persistence1826wkxx8wv7mfnank8l6xu9rxm7kg8rvvk4e0a",

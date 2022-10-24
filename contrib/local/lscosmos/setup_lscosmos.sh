@@ -73,12 +73,28 @@ cat << EOF > /tmp/jumpstart.json
   "transfer_port": "$(echo $CHANNEL_INFO | jq -r '.port_id')",
   "base_denom": "uatom",
   "mint_denom": "stk/uatom",
-  "min_deposit": "1",
+  "min_deposit": "1000",
   "allow_listed_validators": {
     "allow_listed_validators": [
       {
         "validator_address": "$(gaiad keys show val1 -a --bech val)",
-        "target_weight": "1"
+        "target_weight": "0.2"
+      },
+      {
+        "validator_address": "$(gaiad keys show val2 -a --bech val)",
+        "target_weight": "0.2"
+      },
+      {
+        "validator_address": "$(gaiad keys show val3 -a --bech val)",
+        "target_weight": "0.2"
+      },
+      {
+        "validator_address": "$(gaiad keys show val4 -a --bech val)",
+        "target_weight": "0.2"
+      },
+      {
+        "validator_address": "$(gaiad keys show val5 -a --bech val)",
+        "target_weight": "0.2"
       }
     ]
   },

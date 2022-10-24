@@ -29,7 +29,8 @@ metadata:
   name: gaia-validator
 spec:
   serviceName: gaia-validator
-  replicas: 3
+  replicas: 6
+  podManagementPolicy: Parallel
   revisionHistoryLimit: 3
   selector:
     matchLabels:

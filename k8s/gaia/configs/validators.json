@@ -43,6 +43,34 @@
       "mnemonic": "crunch armed fatal agent fat daughter shed draft hundred skin wheat maid dice please universe elbow start fantasy reopen paper relief tumble ability holiday\n"
     },
     {
+      "name": "val5",
+      "type": "local",
+      "address": "cosmos1lrhqmkwmrg97xp8lc3adwv6tnumk77nmrpehr8",
+      "pubkey": "{\"@type\":\"/cosmos.crypto.secp256k1.PubKey\",\"key\":\"AklgtKzxvc1gq2x51EPaLq08hMBiqiXH/CSffEXIrwyH\"}",
+      "mnemonic": "snake magnet mean guide unaware express spin hat finger carry firm erode seven plate put cable ozone car acoustic device rally desk roof opera"
+    },
+    {
+      "name": "val6",
+      "type": "local",
+      "address": "cosmos196xge025l8rx7qr7u58e3fu2mqpspqhpmj4wqj",
+      "pubkey": "{\"@type\":\"/cosmos.crypto.secp256k1.PubKey\",\"key\":\"AidYNbJkysLJnm3XxVefPU7PayyJG3fhM3UTVp9l3euv\"}",
+      "mnemonic": "bronze tattoo soon maid point blush develop seek uniform urban ready auto creek uncover network height between talk lake hello use north trouble then"
+    },
+    {
+      "name": "val7",
+      "type": "local",
+      "address": "cosmos1vxfmk887xuwuw5na2e79d9j7q7s7f7zgnc6jtw",
+      "pubkey": "{\"@type\":\"/cosmos.crypto.secp256k1.PubKey\",\"key\":\"AnKidkkcHREkWhJ1eD2yDHb+UF1wnYkf2D2NlAMx80ZL\"}",
+      "mnemonic": "various able turn behave average payment burden nation clap panther gloom math arena seat master cupboard huge odor eternal remove surround grain immune autumn"
+    },
+    {
+      "name": "val8",
+      "type": "local",
+      "address": "cosmos1802qukayt4x7ewe4jdz0dlhdkz99a3xk4ghu85",
+      "pubkey": "{\"@type\":\"/cosmos.crypto.secp256k1.PubKey\",\"key\":\"AnNj0RDxCyWWecn4ny66kknq5hQN/9fp8hDfDjfGZVMp\"}",
+      "mnemonic": "blast dial habit trend normal few slight extend actual together soldier uncover dose path barely future fruit wonder shrimp million unaware forget nasty vault"
+    },
+    {
       "name": "cosmos",
       "type": "local",
       "address": "cosmos1d9fylz3mgxw2x33thvw3kg6eymuxzqwd38tx35",
