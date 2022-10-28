@@ -141,13 +141,6 @@ spec:
               mv $GAIA_DIR/config/genesis.new.json $GAIA_DIR/config/genesis.json
               
               gaiad tendermint show-node-id --home $GAIA_DIR > /gaiad/genesis-node-id.txt
-          resources:
-            limits:
-              cpu: "0.2"
-              memory: "200M"
-            requests:
-              cpu: "0.1"
-              memory: "100M"
           volumeMounts:
             - mountPath: /gaiad
               name: gaiad
@@ -170,13 +163,6 @@ spec:
             - "-c"
             - |
               gaiad start --home $GAIA_DIR
-          resources:
-            limits:
-              cpu: "1"
-              memory: "1G"
-            requests:
-              cpu: "0.5"
-              memory: "500M"
           volumeMounts:
             - mountPath: /gaiad
               name: gaiad
@@ -195,13 +181,6 @@ spec:
             - name: CLIENT_NAME
               value: "gaiad"
           command: [ "exposer" ]
-          resources:
-            limits:
-              cpu: "0.1"
-              memory: "100M"
-            requests:
-              cpu: "0.1"
-              memory: "100M"
           volumeMounts:
             - mountPath: /gaiad
               name: gaiad

@@ -39,6 +39,7 @@ spec:
             - |
               apt update
               apt -y install jq
+              apt -y install vim
               mkdir $RELAYER_DIR
               CONFIG_FILE="$CONFIG.toml"
               echo "$CONFIG_FILE"

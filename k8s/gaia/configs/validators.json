@@ -40,7 +40,587 @@
         "@type": "/cosmos.crypto.secp256k1.PubKey",
         "key": "A0Iv3dQ0RFENodXd3civXu6pgdfqPnMB9Ss5W5y9gdSc"
       },
-      "mnemonic": "crunch armed fatal agent fat daughter shed draft hundred skin wheat maid dice please universe elbow start fantasy reopen paper relief tumble ability holiday\n"
+      "mnemonic": "crunch armed fatal agent fat daughter shed draft hundred skin wheat maid dice please universe elbow start fantasy reopen paper relief tumble ability holiday"
+    },
+    {
+      "name": "val5",
+      "type": "local",
+      "address": "cosmos1ydd5wx0u2sa87zamymykdzzdcq482wj46cyfgu",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A/AZWIsAb98lLaHIye/SYZc08lkxkMr+bjoErGChCau/"
+      },
+      "mnemonic": "slender water fatal whale ginger muffin nasty unique anger hollow section swamp wine area usage equal pole vintage wood hard hope mistake comic canal"
+    },
+    {
+      "name": "val6",
+      "type": "local",
+      "address": "cosmos1f7tk08drskv6h0c5mx6hnl090z5jttwnuj4hzx",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AmPea3EF+cUcAQvmswHl6wvxbTW3cbKW9cFJE+soMFns"
+      },
+      "mnemonic": "case dizzy obvious maze tide security must able course staff awful vote height awake success river rail describe crew century protect cactus winner cream"
+    },
+    {
+      "name": "val7",
+      "type": "local",
+      "address": "cosmos14zj97lw3mtkj8zqyaw67mk9l4l5l8kq5fvwnms",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A/o8rTxZB1TQ5stmfzPOGPkO+zV5QQRsBm29JH5qdDxz"
+      },
+      "mnemonic": "mass budget taste organ march rack crucial hamster upgrade episode illness fury taste chief dinosaur monster stone regret decade elevator orphan pull dynamic crowd"
+    },
+    {
+      "name": "val8",
+      "type": "local",
+      "address": "cosmos16jxrygc6rj5eh56vx3hsacvawmgrwvrtvz98px",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AxxY0Uwe2hi761HIAtGIZ3CYaaomkk7+oNBBgXPR2eQ+"
+      },
+      "mnemonic": "menu cute owner prefer cream possible shove item mountain reunion labor spike rent bag alert body property profit enroll wave citizen dad huge trash"
+    },
+    {
+      "name": "val9",
+      "type": "local",
+      "address": "cosmos1twrzgpm72yq9khtsk0qyyge2vgcl0slgajysa7",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A2n1eRBRnGlIw9dj64IoWhzKx+wVcsJJoDYGgKqdPqu6"
+      },
+      "mnemonic": "gorilla purchase wheel fan seed sure pupil material forum comic warm canvas clarify napkin first crucial ensure orchard equal oven dance isolate cheap man"
+    },
+    {
+      "name": "val10",
+      "type": "local",
+      "address": "cosmos1pe5w7udsddhu09tca40kryr6urms9rjyxf3x6c",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Aup3xkGAfu5VNUv/AU5YZfwIlH97cNanq2AT6hJAOSt7"
+      },
+      "mnemonic": "leave spoil chunk ill raccoon wing property rose pulse sunny theme door route cage ceiling dice holiday valley risk silent joke develop blame route"
+    },
+    {
+      "name": "val11",
+      "type": "local",
+      "address": "cosmos1avzjvwjmcsdmv0ky4670feumllt0n6sd9d0c3z",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Ax2ENYUncS84RPlO178Udb2tJ8cqDXfDrf0raRF4mXCH"
+      },
+      "mnemonic": "father firm merit arm symbol session time also foil smart right laundry parent sugar require cry tag quiz profit oval lawn reject emerge decrease"
+    },
+    {
+      "name": "val12",
+      "type": "local",
+      "address": "cosmos1dmujcztwdmkzdwp4q06pm8mdypzqn3fhqzwtm9",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A/pxD9gWe5/dspx3SDWw52Kh4Tl3uGrWXDjrse1opxkT"
+      },
+      "mnemonic": "pill misery virtual face gesture plunge moon act amazing diary mammal vacant shrug below minimum swap lab shine install ritual seed gallery envelope acoustic"
+    },
+    {
+      "name": "val13",
+      "type": "local",
+      "address": "cosmos1swu890evwcc75ckfkad07juhu6y4tj77a9my6w",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Ajrz+VqWo8HBPqsbFp0Omm6Vkg05Cx6E23Ph6veAx1To"
+      },
+      "mnemonic": "torch bright riot ethics feature stock language cook salon nasty sponsor plunge marine wasp duty jaguar find actual blame ladder cruel silent bonus motor"
+    },
+    {
+      "name": "val14",
+      "type": "local",
+      "address": "cosmos1xpvp75scm7wr86tl70stwz2znm6xjw63m87djf",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Aqgq2rOw18+PnMbUcFjZNp0+Ddxt8APE0qbAMk4Fqjm6"
+      },
+      "mnemonic": "curious olympic repair cool mobile basic tackle match chronic task shuffle cherry ankle talk liar cruise siren cross shallow panther image work bubble shell"
+    },
+    {
+      "name": "val15",
+      "type": "local",
+      "address": "cosmos13lcnkx4fpdjqsxd785lu68ksl7etwda3x70vss",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "At4CNQWfQwl4KtKzpArhBQO+VdlM8E63AqXxmvcbV0eT"
+      },
+      "mnemonic": "tool industry pigeon vacuum culture guess refuse hand medal that foot gas twin artist fashion catch pole animal omit rival large sunny sister anger"
+    },
+    {
+      "name": "val16",
+      "type": "local",
+      "address": "cosmos1wpewn779cx9fmgunyy9e4lamqyjzm2shrv2eep",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Awn4CbEQxStmjCnvbNiRKtlwoxJaiim4csH/Kj4Osmlq"
+      },
+      "mnemonic": "burger enter destroy museum worry dust festival trade promote chase clarify vehicle hockey zero display eagle manage snow sun erupt hamster monitor only false"
+    },
+    {
+      "name": "val17",
+      "type": "local",
+      "address": "cosmos1rq7n9fxkgzm60lyqvullapjmjjqh52z6du8jg2",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Ag2/ozOiRQtZ26TPLwoFrOvSRabr2JMOPQKrzrn+c6P7"
+      },
+      "mnemonic": "picnic food crush payment thumb junk receive medal dash rookie real scorpion supply damp rural mansion split exclude tongue lunar sort range security fuel"
+    },
+    {
+      "name": "val18",
+      "type": "local",
+      "address": "cosmos12p9wm52ql248nfm5434uraux6cq6wej70khgat",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AqTxTT6/gdiJnYzl/iMbJ4DRlglXvHOlZK0xEYhB4OrT"
+      },
+      "mnemonic": "give tomorrow brisk blind fuel holiday desert crowd liar nasty sign still coil trial repair fossil salon warrior dawn dice recycle once super hero"
+    },
+    {
+      "name": "val19",
+      "type": "local",
+      "address": "cosmos1g06uvhgcfr8ylhqrtvr6266mhvuelqf2wn5mqa",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AgnCEijSf/eZm0iaKA4xL4mFYX2GFcO4ssjw8jMqxP37"
+      },
+      "mnemonic": "fresh symbol buyer pink rookie author excuse ordinary family family egg cabbage tortoise wrong antique blame swamp accuse nice project host chunk thank jewel"
+    },
+    {
+      "name": "val20",
+      "type": "local",
+      "address": "cosmos13v3hvzpnqkv4s8f7hza6vhrlk9ukeryfyyjsn0",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A7cEZb63oLgJ3T/9ImK9nAsTsKrty49Sr3vfWF3lrJ53"
+      },
+      "mnemonic": "potato between visa stumble vessel panther nature noise keen inhale logic tourist subway govern wonder dress ethics enrich party funny almost rack cheese lemon"
+    },
+    {
+      "name": "val21",
+      "type": "local",
+      "address": "cosmos1z5w02rgwuwkddp2yfzpasar07ca082ymw4kcph",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AzdecLQtroRCZ7A5sA8EXMgvuozaffH0xvoA6EMLPPV9"
+      },
+      "mnemonic": "afraid shield chair reward truly dose actor author copy garbage deer credit mesh erupt bonus quick return carbon word pond spot siege milk state"
+    },
+    {
+      "name": "val22",
+      "type": "local",
+      "address": "cosmos177vz2srxp6vh3x7swujtk8kfxy3sajlhrf29nk",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AtG4JIBUvFVLUIW8nqyazaN5teX7GHp1Hy7AN8DB1KVL"
+      },
+      "mnemonic": "drama cram omit chest section virus hair middle whip unlock member together ball trend olympic small banner cup shine caught envelope bomb fee laundry"
+    },
+    {
+      "name": "val23",
+      "type": "local",
+      "address": "cosmos1cuzmm7cjgutmk8f27fsr4fwtdyq0ecgakywzty",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AjCfMgIqt03mRsphggVe9VakXnRl+wzT+RIqEEJBFoCD"
+      },
+      "mnemonic": "glass inquiry wage wing glow evolve rude funny enforce slush soon false wolf deer normal fix shrimp neglect cinnamon delay axis toward detect oxygen"
+    },
+    {
+      "name": "val24",
+      "type": "local",
+      "address": "cosmos1ke3a76nx9fts5pst88gyyr94fjagwarc9xwfh9",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AjrESEv171KtrGbZH6IewN4e56/UNRUEZVqDT8gVcH1M"
+      },
+      "mnemonic": "gap saddle sea resource client multiply second supply onion federal scare security antique ignore govern soup wrap quarter fancy plunge tissue scene system fly"
+    },
+    {
+      "name": "val25",
+      "type": "local",
+      "address": "cosmos1248sraase46jzwhm3xppxq4s0uaq8e3ywq62u6",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "ApGviltbzgShxY4rEto+/WI5eQGqf5Q22IiOllgZojyN"
+      },
+      "mnemonic": "physical found dwarf ball anger health term heavy office damage siege potato town fork gorilla rigid destroy prevent salad drop black there spare weather"
+    },
+    {
+      "name": "val26",
+      "type": "local",
+      "address": "cosmos1zns5zzmjddee0jfngfn0tht543ms86tu208ptj",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Azv0covSK+TnQljnZmVLEniu/Uw/2cu7vNwJuVBJj9gr"
+      },
+      "mnemonic": "half opinion salute dove unhappy upset nephew child wing party volume consider slot grace oak crash multiply strategy galaxy crystal car exclude diet scrap"
+    },
+    {
+      "name": "val27",
+      "type": "local",
+      "address": "cosmos1st7n7r4gsvyxw7tvedw72pft6n8yx4qpdm7xsg",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A0jOwrq9APggdI4dlHnWO6bVBkGco723c81Fmrxf+uXs"
+      },
+      "mnemonic": "require salad buddy civil grass stereo praise worry inmate wonder erase stairs exile machine plunge average smile spray symbol number boy limb series economy"
+    },
+    {
+      "name": "val28",
+      "type": "local",
+      "address": "cosmos1cqzxeenl9zlxcgmeta5f2glhy63yjmjpew2rzj",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A0+vNajysfcUY3AY0pcjenDKfJvFFKwu4ngdVnbktRDX"
+      },
+      "mnemonic": "choice fresh reduce planet weasel digital swear flavor one various memory join gentle bring sick skate silver economy unhappy power powder jealous skirt melody"
+    },
+    {
+      "name": "val29",
+      "type": "local",
+      "address": "cosmos1uwnv823w8vkafac83q6wjvjry3hr6rkfrnnnu3",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Aw5or1MyRQHJ6TI1l9XqlVbSxZHW/1dlvKgC3bxp/xTX"
+      },
+      "mnemonic": "prefer wire river sport steel aerobic riot clever notice undo typical bronze dirt season manage lock ceiling ivory essence figure amused peanut neither pudding"
+    },
+    {
+      "name": "val30",
+      "type": "local",
+      "address": "cosmos1f2lc5ptp09fpvr8qe3c4ztptcpt4xpqhhmvs4w",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Atd0fgJE9Sl5rf10hzflh6pQJZeUer03y+dsYU3Phx9j"
+      },
+      "mnemonic": "script icon walnut video between turn notable slush spider alert stomach cream include basic seminar series inspire kingdom scan ghost gas loyal angry pledge"
+    },
+    {
+      "name": "val31",
+      "type": "local",
+      "address": "cosmos1ssr32xzzt5qav9z4elun9klkdnqf9v58tdu7m5",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AzmLB1AaDnp8EKlhp8i7ug0/KKmD8pHsegNazXZyjVjy"
+      },
+      "mnemonic": "elevator gift matrix nasty shrimp photo idle spider bracket paper today habit reflect buffalo tree venture dune side all popular chase science guard put"
+    },
+    {
+      "name": "val32",
+      "type": "local",
+      "address": "cosmos1ls09jw6g6vw6swh7w65sj2dlh9flpdxunpwg7g",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A+Bk8sllRyEftXLtewtqwkhPyjQfTnTdnRpHfs/c5rmI"
+      },
+      "mnemonic": "fuel version acoustic resist marble device dish skate pole glad curious van genius napkin summer grant diet life effort swap rabbit blast debate relax"
+    },
+    {
+      "name": "val33",
+      "type": "local",
+      "address": "cosmos1g025pfa8at9d8wyw7su68p9wrzcvx86t57s6ej",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Arei254nXeRzaPD86z7cx3g8eoQM0PxmtZSVUlO5hNNV"
+      },
+      "mnemonic": "actor fit physical drill release frown elite focus obvious smoke home race mountain source car local deposit relief push pause series desk ball embody"
+    },
+    {
+      "name": "val34",
+      "type": "local",
+      "address": "cosmos1x0dn8t4676qen45que6fl0xlwhanlykx72vgg4",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AqQ5Z+IQoYLZshd3haNFzzunMXKEHdVf960B8NaRtjuk"
+      },
+      "mnemonic": "elegant file road similar duck bus cereal liar squeeze grain weather glad junior behind omit buddy sudden grid recipe skill code polar embody drum"
+    },
+    {
+      "name": "val35",
+      "type": "local",
+      "address": "cosmos12qvt9hkly3ygna296f3eg62j2q8zxmgt8v379k",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AqUt/7eLLvxTXbSIKoTWep9mnW+RK3fn5iH8WCQcak06"
+      },
+      "mnemonic": "job town mad talent pull family assume thumb tape away treat fantasy grocery cradle ice tip bar list radio always bright acid host fuel"
+    },
+    {
+      "name": "val36",
+      "type": "local",
+      "address": "cosmos1c0fxtjg740l40y36gaaqt6su4sujw905hew893",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AmuVJqy9jrV5LK87qUQG97YqD0+ij09rNdiHM1O8wZZ0"
+      },
+      "mnemonic": "phone wish metal yard tuition reason reward economy pen deposit consider among coffee main latin bubble bullet start grid better rotate decade exit adult"
+    },
+    {
+      "name": "val37",
+      "type": "local",
+      "address": "cosmos1demalkd98gs9ty5t65af6fy2e7cq47qgl9jyca",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A0GYoTSONX53iHyy/FvBvXeGrt/b1JnEFQCZ92d2WHbY"
+      },
+      "mnemonic": "law era since grid legal tail cage health virtual bike doctor chuckle turkey blush piano wise bundle run frozen identify patient laptop stay opera"
+    },
+    {
+      "name": "val38",
+      "type": "local",
+      "address": "cosmos1a4v0eu86eazf7jmmap902h90luzeldqp2hxmw7",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Akt5tdMwWpBzF+empsQCOxTHEM0ZV6RCWkEGeyqrwSH3"
+      },
+      "mnemonic": "pair vendor alert where rival faculty coil kiwi keen blouse milk toy believe wife will topple pottery cargo crater barely evidence involve raw height"
+    },
+    {
+      "name": "val39",
+      "type": "local",
+      "address": "cosmos14nyxwferp5nuugyhd9a66kjqax7gg03pxcsjkr",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AholBvbKFtDALlnxDYttsWhWO4RfABHASR/qQEVb5CdN"
+      },
+      "mnemonic": "burger sketch search picnic need number boil window vapor crush scorpion steel improve soul metal episode dose latin wide box derive table smoke tail"
+    },
+    {
+      "name": "val40",
+      "type": "local",
+      "address": "cosmos1sqjk7ktxgy5wu6ky0fuj6ew27pnvm3960ytxkq",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Aps0voFIj8/Hfn8Dj5n6h/RDnpMCv7QBEam3gRvcyO1m"
+      },
+      "mnemonic": "spawn govern captain beauty survey giant jump inquiry betray slogan welcome duty fire prize stadium lyrics chunk hair theme hand dinner spirit blue sight"
+    },
+    {
+      "name": "val41",
+      "type": "local",
+      "address": "cosmos1ycl62xrq355tv0dup96dt4xjmz5wtharqk7nm6",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AvtmjGkvOASk/wHjbaotIDozTPfsj/oQFv9c7I7LgML3"
+      },
+      "mnemonic": "clutch wish unfair letter top junior click siege renew clown logic able public today poet subject economy shove arrange egg desk smile usual noodle"
+    },
+    {
+      "name": "val42",
+      "type": "local",
+      "address": "cosmos1jtnmnvf9f8gavthkd76wckynxqppex4q73clm3",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A1dLmqjDTZl2BddJdEHwAmqr7Vea+3/qvknj7s31vqvl"
+      },
+      "mnemonic": "almost soon accuse green casino female west trumpet involve gift sock door doctor critic lend define item brick develop slush gallery dinosaur wear solid"
+    },
+    {
+      "name": "val43",
+      "type": "local",
+      "address": "cosmos1kgmwwlxrwwjylm8m4mcft360ypmt99zq6l2nnt",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AvzwGVYkH1qsrnNPhrZzuSheshHNrGlrLu4N3BQELAj7"
+      },
+      "mnemonic": "wall road mammal tray situate man develop injury village aware legal cruise trip involve twist sing upper alley float aisle tent damp job supply"
+    },
+    {
+      "name": "val44",
+      "type": "local",
+      "address": "cosmos1xcy09uvcue27sxcgc4d2zedp9e4rmdr9dl69uc",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A9VOr592rqNz4tL5tJgmc9GK7CdyJdW1lPVMFtFHMZD4"
+      },
+      "mnemonic": "limb truth palm unaware universe silent attend cannon steak broccoli diet venue dash decrease march coral near pulp only race frequent meat high poet"
+    },
+    {
+      "name": "val45",
+      "type": "local",
+      "address": "cosmos1husw2f70jztlaftrjw2wx0y283euqay7hkxr3e",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AhclihBasnGOC6YB2o6/3/gVFVf9udcGWIieST4CeAC2"
+      },
+      "mnemonic": "erode crunch any girl latin green rigid galaxy glare field index swift learn bitter embrace route despair sure push make bubble damage plug movie"
+    },
+    {
+      "name": "val46",
+      "type": "local",
+      "address": "cosmos19t7wpvd2f8w54lq9vtkqeef2gjyj2d3alalhke",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A5Rjw6lp3ow6RLmptF/IROTmrF6q6T/E3bpLTGhlxAll"
+      },
+      "mnemonic": "glove goat filter pitch blast aerobic horse treat glow hamster oval monkey display vibrant pistol virus abuse reject cereal proof valve album clown clump"
+    },
+    {
+      "name": "val47",
+      "type": "local",
+      "address": "cosmos138n7pdtll655zzh7e0fep4h7r7a8j3n2gfus87",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AsBkp0sBfMduJ7UxKucbVB9zZi0ZqMhTTNGFvoIwoEgP"
+      },
+      "mnemonic": "swift oppose airport feel engine cereal couple album grape turtle pigeon elbow require harbor erode horse visit total badge regular cupboard unhappy improve coconut"
+    },
+    {
+      "name": "val48",
+      "type": "local",
+      "address": "cosmos1k05nc28zmgfgeasp6d39zg9gxt8xczrzwv06g9",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A0MprWDbDGn/8vy5FC7MezdCM3Ht+y4tlkG1g9sNc0w2"
+      },
+      "mnemonic": "ensure resource fuel oppose shrug jaguar club ladder attend young flush machine dash crumble lawn chimney slot veteran gadget remember fetch protect return rule"
+    },
+    {
+      "name": "val49",
+      "type": "local",
+      "address": "cosmos1pyflcusylp843epca2hs80znuu34htrn8dm4re",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AlZeiahfaZB0G6UHeV2T3g4OiC6X970CfcwtWJxTXTSl"
+      },
+      "mnemonic": "curtain surface menu expect dirt onion arrive ordinary audit invest scrub chuckle royal bomb quantum park target now print slow hobby acoustic faint foil"
+    },
+    {
+      "name": "val50",
+      "type": "local",
+      "address": "cosmos1egqpd426uhy0ahmrrshth9c6ncxw8r9lqfsque",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A7dxO3CUwFDYm1z0KaU9sHd4fY+KFdpdzcJgOi+4y1sN"
+      },
+      "mnemonic": "mushroom garbage juice inmate ill critic ketchup marriage young globe blade blind glove fatigue tiny unusual term notable bar dizzy hire ginger remember burst"
+    },
+    {
+      "name": "val51",
+      "type": "local",
+      "address": "cosmos1mfvgtka50c33ha9q9xtj3gd3ndvdtqf0fwpr47",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Ana0AUJHfwia48f2H+WXeDshCvu5EVHUFbOCOeQXkBdR"
+      },
+      "mnemonic": "void album chapter hill upset giggle barely matter awful gravity diet dinner arrange transfer spell collect limb display hold tree auction consider breeze blur"
+    },
+    {
+      "name": "val52",
+      "type": "local",
+      "address": "cosmos1l77n2kpa9qzg0acnugr8a8wmp5pza6c4se75hw",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AxSjpRW+b9RCXH111VqSB0NOE6l6/lRzleMsAJeG1yBx"
+      },
+      "mnemonic": "weather already capital mimic seminar oval crowd wisdom edge record asset extra night kiwi initial imitate input edge corn mule bonus later birth slow"
+    },
+    {
+      "name": "val53",
+      "type": "local",
+      "address": "cosmos1gv6z8uc4yqggq605tv032x6dqp2hw2u5sls4fs",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AzqrujCYHstOJMawzWekMNb0Zhl2kuswH+YzhNEX5NIN"
+      },
+      "mnemonic": "jacket jacket collect high rough pave position female alpha this muscle army joke puppy small mountain stick cement gym execute green ugly plastic hungry"
+    },
+    {
+      "name": "val54",
+      "type": "local",
+      "address": "cosmos10um0j6u8n4ewjjgn99kyz04nrvma4k7s7qcpjw",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Ajv8lxxWbb/ewECG8mPnBTqLm4f2TEelbYCaZlIoyi9i"
+      },
+      "mnemonic": "dad once album business congress furnace ring brand acoustic fork ozone found spider play toilet subway parrot rescue soldier usual galaxy vivid hurt mirror"
+    },
+    {
+      "name": "val55",
+      "type": "local",
+      "address": "cosmos1p9eh50vuhpgpjt0tfz29pn0wtr6f8kg253dnsf",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AkUHBpni6wydTRapLLFxFNYrc4xbwn1zzaNm/088BiBl"
+      },
+      "mnemonic": "there strike okay silver nice margin sock among nurse regret cable horse ignore enact foster move ritual delay erupt stumble coach noise pledge piano"
+    },
+    {
+      "name": "val56",
+      "type": "local",
+      "address": "cosmos1jpekjlnyjvyhnc7wnzmplgp8y8d8lhhmwuwsg9",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "ArK0mJko8J0shSfmyNYlAoEJwMw0j7z9QHSe9q8dkdFI"
+      },
+      "mnemonic": "cake can order melody they unveil favorite diary tonight carbon angry worry zone luxury another much rifle lottery animal gravity picture wise endless vocal"
+    },
+    {
+      "name": "val57",
+      "type": "local",
+      "address": "cosmos18wds4p27zmz4puh6uxycy9h8seht4ha7p0qydf",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A9MLxztsIM1Ktvb9phrGP0ZuuIApv/47NdiL2s805x3k"
+      },
+      "mnemonic": "gossip become party hedgehog custom fancy humble dice worth develop potato asset oppose design crumble believe item boring kit air brief scale lake rack"
+    },
+    {
+      "name": "val58",
+      "type": "local",
+      "address": "cosmos18kklunrqflg3s3t3y6xrxc7cfa42d7f6fjxa0w",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A0zvlRXdATGVGzcYfT3N2zlj7Vl5V1HvZh5WDhHTxqRd"
+      },
+      "mnemonic": "exercise wine game attract hill race chuckle anger repeat rotate rocket half pyramid source afraid task valid spell exit fruit stadium where hungry dog"
+    },
+    {
+      "name": "val59",
+      "type": "local",
+      "address": "cosmos1gghmpg3tn09getxxs3w3mpjsxularm9a00gxkw",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A+euI+fxX1pC/6huf7zNs/GYkTrvUCWF8hQdFBGTB2zg"
+      },
+      "mnemonic": "essence library hen two garment nuclear devote peasant april umbrella mammal return price print hybrid claim project quiz zero promote version more oyster seminar"
+    },
+    {
+      "name": "val60",
+      "type": "local",
+      "address": "cosmos13y39s4uld2emrzwxm5asnqnhvh50xejxadfgz2",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "Av/QJwDMkrM2uchbeEHxWbKyZvBAFSVue85Ns5u80Q10"
+      },
+      "mnemonic": "energy question laundry wash under gun fatal squirrel fiber outdoor rely remember board rebuild jacket oval derive roast debate gallery square soft broccoli car"
+    },
+    {
+      "name": "val61",
+      "type": "local",
+      "address": "cosmos1l9rz4acpnp66cpzy2hgh29nt6hnqlk5aep4heg",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "AuY6KpW1pK56hbf13CsYCRQzIykQPl0TFpud1fufUNQW"
+      },
+      "mnemonic": "clutch install benefit exit disagree client bus proud choice behind public rigid menu afraid bundle senior wage year hidden kid degree initial route river"
+    },
+    {
+      "name": "val62",
+      "type": "local",
+      "address": "cosmos1yrd3v7947tfxgde9fdysxw7qn8f027qwnmn7ja",
+      "pubkey": {
+        "@type": "/cosmos.crypto.secp256k1.PubKey",
+        "key": "A0RRtE9fnjF5DUUA2Evp706/Uw0+XUBeNhLu5GZ1iRbZ"
+      },
+      "mnemonic": "develop hamster enemy round file enrich bullet sad lift pen spin tree capital apple shop skull degree salmon gasp matrix extra trash casual there"
     }
   ]
 }
