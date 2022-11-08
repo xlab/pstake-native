@@ -96,7 +96,12 @@ func (k Keeper) UndelegateMsgs(ctx sdk.Context, delegatorAddr string, amount sdk
 // FetchValidatorsToDelegate gives a list of all validators having weighted amount for few and 1uatom for rest in order to auto claim all rewards accumulated in current epoch
 func FetchValidatorsToDelegate(valList types.AllowListedValidators, delegationState types.DelegationState, amount sdk.Coin) (types.ValAddressAmounts, error) {
 	curDiffDistribution := GetIdealCurrentDelegations(valList, delegationState, amount, false)
-	sort.Sort(sort.Reverse(curDiffDistribution))
+
+	sort.SliceStable(
+		sort.Reverse(curDiffDistribution),
+		func(i, j int) bool {
+			return curDiffDistribution[i].Amount.LT(curDiffDistribution[j].Amount)
+		})
 
 	return DivideAmountIntoValidatorSet(curDiffDistribution, amount)
 }
@@ -104,7 +109,12 @@ func FetchValidatorsToDelegate(valList types.AllowListedValidators, delegationSt
 // FetchValidatorsToUndelegate gives a list of all validators having weighted amount for few and 1uatom for rest in order to auto claim all rewards accumulated in current epoch
 func FetchValidatorsToUndelegate(valList types.AllowListedValidators, delegationState types.DelegationState, amount sdk.Coin) (types.ValAddressAmounts, error) {
 	currDiffDistribution := GetIdealCurrentDelegations(valList, delegationState, amount, true)
-	sort.Sort(sort.Reverse(currDiffDistribution))
+	sort.SliceStable(
+		sort.Reverse(currDiffDistribution).(types.WeightedAddressAmounts),
+		func(i, j int) bool {
+			return currDiffDistribution[i].Amount.LT(currDiffDistribution[j].Amount)
+		})
+
 	return DivideUndelegateAmountIntoValidatorSet(currDiffDistribution, amount)
 }
 
@@ -187,7 +197,11 @@ func DivideAmountIntoValidatorSet(sortedValDiff types.WeightedAddressAmounts, co
 
 	// Delegate to non-zero weighted validator set only
 	_, nonZeroWeighted := types.GetZeroNonZeroWightedAddrAmts(sortedValDiff)
-	sort.Sort(sort.Reverse(nonZeroWeighted))
+	sort.SliceStable(
+		sort.Reverse(nonZeroWeighted),
+		func(i, j int) bool {
+			return nonZeroWeighted[i].Amount.LT(nonZeroWeighted[j].Amount)
+		})
 
 	valAmounts, remainderCoin := distributeCoinsAmongstValSet(nonZeroWeighted, coin)
 
@@ -201,7 +215,11 @@ func DivideAmountIntoValidatorSet(sortedValDiff types.WeightedAddressAmounts, co
 	// validator with index zero.
 	valAmounts[0].Amount = valAmounts[0].Amount.Add(remainderCoin)
 
-	sort.Sort(valAmounts)
+	sort.SliceStable(
+		valAmounts,
+		func(i, j int) bool {
+			return valAmounts[i].ValidatorAddr < valAmounts[j].ValidatorAddr
+		})
 
 	return valAmounts, nil
 }
@@ -216,8 +234,16 @@ func DivideUndelegateAmountIntoValidatorSet(sortedValDiff types.WeightedAddressA
 
 	// Undelegate first from zero weighted validators then nonzero weighted
 	zeroWeighted, nonZeroWeighted := types.GetZeroNonZeroWightedAddrAmts(sortedValDiff)
-	sort.Sort(sort.Reverse(zeroWeighted))
-	sort.Sort(sort.Reverse(nonZeroWeighted))
+	sort.SliceStable(
+		sort.Reverse(zeroWeighted),
+		func(i, j int) bool {
+			return zeroWeighted[i].Amount.LT(zeroWeighted[j].Amount)
+		})
+	sort.SliceStable(
+		sort.Reverse(nonZeroWeighted),
+		func(i, j int) bool {
+			return nonZeroWeighted[i].Amount.LT(nonZeroWeighted[j].Amount)
+		})
 	valWeighted := append(zeroWeighted, nonZeroWeighted...)
 
 	valAmounts, remainderCoin := distributeCoinsAmongstValSet(valWeighted, coin)
@@ -234,7 +260,11 @@ func DivideUndelegateAmountIntoValidatorSet(sortedValDiff types.WeightedAddressA
 
 	// sort the val address amount based on address to avoid generating different lists
 	// by all validators
-	sort.Sort(valAmounts)
+	sort.SliceStable(
+		valAmounts,
+		func(i, j int) bool {
+			return valAmounts[i].ValidatorAddr < valAmounts[j].ValidatorAddr
+		})
 
 	return valAmounts, nil
 }
@@ -300,8 +330,16 @@ func (k Keeper) GetAllValidatorsState(ctx sdk.Context) (types.AllowListedVals, t
 	}
 
 	// sort both updatedValList and hostAccountDelegations
-	sort.Sort(updatedValSet)
-	sort.Sort(updatedDelegationState)
+	sort.SliceStable(
+		updatedValSet,
+		func(i, j int) bool {
+			return updatedValSet[i].ValidatorAddress < updatedValSet[j].ValidatorAddress
+		})
+	sort.SliceStable(
+		updatedDelegationState,
+		func(i, j int) bool {
+			return updatedDelegationState[i].ValidatorAddress < updatedDelegationState[j].ValidatorAddress
+		})
 
 	// returns the two updated lists
 	return updatedValSet, updatedDelegationState

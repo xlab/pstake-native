@@ -1,8 +1,6 @@
 package types
 
 import (
-	"sort"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -37,11 +35,6 @@ func NewWeightedAddressAmount(address string, weight sdk.Dec, coin sdk.Coin, unb
 		UnbondingTokens: unbondingTokens,
 	}
 }
-
-var (
-	_ sort.Interface = WeightedAddressAmounts{}
-	_ sort.Interface = ValAddressAmounts{}
-)
 
 // NewWeightedAddressAmounts returns WeightedAddressAmounts array
 func NewWeightedAddressAmounts(w []WeightedAddressAmount) WeightedAddressAmounts {

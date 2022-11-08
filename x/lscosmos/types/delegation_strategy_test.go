@@ -50,6 +50,11 @@ func TestWeightedAddressAmounts(t *testing.T) {
 
 	// sort weightedAddressAmounts
 	sort.Sort(weightedAddressAmounts)
+	sort.SliceStable(
+		weightedAddressAmounts,
+		func(i, j int) bool {
+			return weightedAddressAmounts[i].Amount.LT(weightedAddressAmounts[j].Amount)
+		})
 	require.Equal(t, wa1, weightedAddressAmounts[0])
 	require.Equal(t, wa2, weightedAddressAmounts[1])
 	require.Equal(t, wa4, weightedAddressAmounts[2])

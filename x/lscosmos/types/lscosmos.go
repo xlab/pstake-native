@@ -2,7 +2,6 @@ package types
 
 import (
 	"errors"
-	"sort"
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -13,11 +12,6 @@ import (
 type (
 	HostAccountDelegations []HostAccountDelegation
 	AllowListedVals        []AllowListedValidator
-)
-
-var (
-	_ sort.Interface = &HostAccountDelegations{}
-	_ sort.Interface = &AllowListedVals{}
 )
 
 // Valid performs validity checks on AllowListedValidators and returns bool
@@ -55,36 +49,12 @@ func GetAddressMap(validators AllowListedValidators) map[string]sdk.Dec {
 	return addressMap
 }
 
-func (av AllowListedVals) Len() int {
-	return len(av)
-}
-
-func (av AllowListedVals) Less(i, j int) bool {
-	return av[i].ValidatorAddress < av[j].ValidatorAddress
-}
-
-func (av AllowListedVals) Swap(i, j int) {
-	av[i], av[j] = av[j], av[i]
-}
-
 // NewHostAccountDelegation returns new HostAccountDelegation
 func NewHostAccountDelegation(validatorAddress string, amount sdk.Coin) HostAccountDelegation {
 	return HostAccountDelegation{
 		ValidatorAddress: validatorAddress,
 		Amount:           amount,
 	}
-}
-
-func (h HostAccountDelegations) Len() int {
-	return len(h)
-}
-
-func (h HostAccountDelegations) Less(i, j int) bool {
-	return h[i].ValidatorAddress < h[j].ValidatorAddress
-}
-
-func (h HostAccountDelegations) Swap(i, j int) {
-	h[i], h[j] = h[j], h[i]
 }
 
 // NewHostChainRewardAddress returns new HostChainRewardAddress

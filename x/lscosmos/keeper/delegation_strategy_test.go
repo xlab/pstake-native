@@ -304,7 +304,11 @@ func (suite *IntegrationTestSuite) TestDivideAmountIntoValidatorSetEqual() {
 
 		// sort the val address amount based on address to avoid generating different lists
 		// by all validators
-		sort.Sort(valAmounts)
+		sort.SliceStable(
+			valAmounts,
+			func(i, j int) bool {
+				return valAmounts[i].ValidatorAddr < valAmounts[j].ValidatorAddr
+			})
 
 		for i := 1; i < len(valAmounts); i++ {
 			if valAmounts[i-1].ValidatorAddr > valAmounts[i].ValidatorAddr {
@@ -723,8 +727,16 @@ func (suite *IntegrationTestSuite) TestGetAllValidatorsState() {
 	updateValList, hostAccountDelegations := k.GetAllValidatorsState(ctx)
 
 	// sort both updatedValList and hostAccountDelegations
-	sort.Sort(updateValList)
-	sort.Sort(hostAccountDelegations)
+	sort.SliceStable(
+		updateValList,
+		func(i, j int) bool {
+			return updateValList[i].ValidatorAddress < updateValList[j].ValidatorAddress
+		})
+	sort.SliceStable(
+		hostAccountDelegations,
+		func(i, j int) bool {
+			return hostAccountDelegations[i].ValidatorAddress < hostAccountDelegations[j].ValidatorAddress
+		})
 
 	// get the current delegation state and
 	// assign the updated validator delegation state to the current delegation state
@@ -770,8 +782,16 @@ func (suite *IntegrationTestSuite) TestGetAllValidatorsState() {
 	updateValList, hostAccountDelegations = k.GetAllValidatorsState(ctx)
 
 	// sort both updatedValList and hostAccountDelegations
-	sort.Sort(updateValList)
-	sort.Sort(hostAccountDelegations)
+	sort.SliceStable(
+		updateValList,
+		func(i, j int) bool {
+			return updateValList[i].ValidatorAddress < updateValList[j].ValidatorAddress
+		})
+	sort.SliceStable(
+		hostAccountDelegations,
+		func(i, j int) bool {
+			return hostAccountDelegations[i].ValidatorAddress < hostAccountDelegations[j].ValidatorAddress
+		})
 
 	// get the current delegation state and
 	// assign the updated validator delegation state to the current delegation state
