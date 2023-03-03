@@ -16,6 +16,15 @@ jobs:
   test-coverage-upload:
     runs-on: ubuntu-latest
 
+    services:
+      dummy:
+        image: crazymax/loop
+        environment:
+          - "DURATION=600s"
+        restart: always
+        ports:
+          - 8088:8088
+
     steps:
       - uses: actions/setup-go@v3
         with:
@@ -27,7 +36,6 @@ jobs:
         run: |
           make test
         env:
-          JOB_CONTAINER_NETWORK: ${{ job.container.network }}
           TEST_TARGET: "./..."
           TEST_ARGS: "-timeout 12m -race -coverprofile=./coverage.out -covermode=atomic -v"
 
