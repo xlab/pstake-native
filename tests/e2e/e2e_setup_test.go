@@ -22,6 +22,7 @@ import (
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
+	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 	tmconfig "github.com/tendermint/tendermint/config"
@@ -76,7 +77,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 		v, _ := json.Marshal(net)
 		s.T().Logf("%d) network: %s", idx, string(v))
 
-		if strings.Contains(net.Name, "github_") {
+		if net.Name == "bridge" {
 			nets, err := s.dkrPool.NetworksByName(net.Name)
 			s.Require().NoError(err)
 			s.dkrNet = &nets[0]
@@ -317,19 +318,28 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		resource, err := s.dkrPool.RunWithOptions(runOpts, noRestart)
 		s.Require().NoError(err)
 
-		if err := resource.ConnectToNetwork(s.dkrNet); err != nil {
+		if err := connectToNetworkWithAlias(
+			s.dkrPool.Client,
+			resource,
+			s.dkrNet,
+			val.instanceName(),
+		); err != nil {
 			s.T().Logf("reconnect to s.dkrNet %s (%s) failed? %+v", s.dkrNet.Network.ID, s.dkrNet.Network.Name, err)
 		}
 
-		s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s)",
+		s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s) alias: %s",
 			val.index,
 			resource.GetPort("26657/tcp"),
 			resource.GetBoundIP("26657/tcp"),
 			resource.GetIPInNetwork(s.dkrNet),
+			resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases[0],
 		)
 
 		if val.index == 0 {
-			firstNodeTendermintRPC = "tcp://172.18.0.2:26657" // "tcp://" + resource.GetHostPort("26657/tcp")
+			firstNodeTendermintRPC = fmt.Sprintf(
+				"tcp://%s:26657",
+				resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases[0],
+			)
 		}
 
 		s.valResources[c.id][i] = resource
@@ -372,6 +382,34 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		time.Second,
 		"PStake node failed to produce blocks",
 	)
+}
+
+// connectToNetworkWithAlias connects container to network and assigns an alias to them.
+func connectToNetworkWithAlias(
+	client *docker.Client,
+	r *dockertest.Resource,
+	network *dockertest.Network,
+	alias string) error {
+	err := client.ConnectNetwork(
+		network.Network.ID,
+		docker.NetworkConnectionOptions{Container: r.Container.ID},
+	)
+	if err != nil {
+		return errors.Wrap(err, "Failed to connect container to network")
+	}
+
+	// refresh internal representation
+	r.Container, err = client.InspectContainer(r.Container.ID)
+	if err != nil {
+		return errors.Wrap(err, "Failed to refresh container information")
+	}
+
+	network.Network, err = client.NetworkInfo(network.Network.ID)
+	if err != nil {
+		return errors.Wrap(err, "Failed to refresh network information")
+	}
+
+	return nil
 }
 
 func (s *IntegrationTestSuite) runIBCRelayer() {
