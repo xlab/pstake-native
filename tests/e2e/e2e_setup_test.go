@@ -69,8 +69,18 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	s.dkrPool, err = dockertest.NewPool("")
 	s.Require().NoError(err)
 
+	s.T().Log("found existing networks:")
+	networks, err := s.dkrPool.Client.ListNetworks()
+	s.Require().NoError(err)
+	for idx, net := range networks {
+		v, _ := json.Marshal(net)
+		s.T().Logf("%d) network: %s", idx, string(v))
+	}
+
 	// s.dkrNet, err = s.dkrPool.CreateNetwork(fmt.Sprintf("%s-%s-testnet", s.chainA.id, s.chainB.id))
 	// s.Require().NoError(err)
+
+	// s.dkrPool.Client.ConnectNetwork("", docker.NetworkConnectionOptions{})
 
 	s.valResources = make(map[string][]*dockertest.Resource)
 
@@ -320,7 +330,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		)
 	}
 
-	rpcClient, err := rpchttp.New(firstNodeTendermintRPC, "/websocket")
+	rpcClient, err := rpchttp.New("tpc://localhost:26657", "/websocket")
 	s.Require().NoError(err)
 
 	var attempt int
