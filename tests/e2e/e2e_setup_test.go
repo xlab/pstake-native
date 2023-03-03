@@ -327,18 +327,17 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 			s.T().Logf("reconnect to s.dkrNet %s (%s) failed? %+v", s.dkrNet.Network.ID, s.dkrNet.Network.Name, err)
 		}
 
-		s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s) alias: %s",
+		s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s)",
 			val.index,
 			resource.GetPort("26657/tcp"),
 			resource.GetBoundIP("26657/tcp"),
 			resource.GetIPInNetwork(s.dkrNet),
-			resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases[0],
 		)
 
 		if val.index == 0 {
 			firstNodeTendermintRPC = fmt.Sprintf(
 				"tcp://%s:26657",
-				resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases[0],
+				val.instanceName(),
 			)
 		}
 
@@ -351,7 +350,15 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		)
 	}
 
-	rpcClient, err := rpchttp.New("tcp://172.18.0.2:26657", "/websocket")
+	s.T().Log("refresh list of networks with containers:")
+	networks, err := s.dkrPool.Client.ListNetworks()
+	s.Require().NoError(err)
+	for idx, net := range networks {
+		v, _ := json.Marshal(net)
+		s.T().Logf("%d) network: %s", idx, string(v))
+	}
+
+	rpcClient, err := rpchttp.New(firstNodeTendermintRPC, "/websocket")
 	s.Require().NoError(err)
 
 	var attempt int
