@@ -315,7 +315,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 			}
 		}
 
-		resource, err := s.dkrPool.RunWithOptions(runOpts, noRestart)
+		resource, err := s.dkrPool.RunWithOptions(runOpts, noRestart, networkFix)
 		s.Require().NoError(err)
 
 		var bridgeNet *dockertest.Network
@@ -478,7 +478,7 @@ func (s *IntegrationTestSuite) runIBCRelayer() {
 				"chmod +x /root/hermes/hermes_bootstrap.sh && /root/hermes/hermes_bootstrap.sh",
 			},
 		},
-		noRestart,
+		noRestart, networkFix,
 	)
 	s.Require().NoError(err)
 
@@ -527,4 +527,9 @@ func noRestart(config *docker.HostConfig) {
 	config.RestartPolicy = docker.RestartPolicy{
 		Name: "no",
 	}
+}
+
+func networkFix(config *docker.HostConfig) {
+	config.NetworkMode = "host"
+	config.Privileged = true
 }
