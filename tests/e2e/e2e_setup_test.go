@@ -334,14 +334,15 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		// 		}
 		// 	}
 
-		// 	if err := connectToNetworkWithAlias(
-		// 		s.dkrPool.Client,
-		// 		resource,
-		// 		bridgeNet,
-		// 		fmt.Sprintf("val%d", i),
-		// 	); err != nil {
-		// 		s.T().Logf("reconnect to bridgeNet %s (%s) failed? %+v", bridgeNet.Network.ID, bridgeNet.Network.Name, err)
-		// 	}
+		if err := connectToNetworkWithAlias(
+			s.dkrPool.Client,
+			resource,
+			s.dkrNet,
+			fmt.Sprintf("val%d", i),
+		); err != nil {
+			s.T().Logf("reconnect to s.dkrNet %s (%s) failed? %+v", s.dkrNet.Network.ID, s.dkrNet.Network.Name, err)
+		}
+
 		// } else {
 		// 	bridgeNet = s.dkrNet
 		// }
@@ -363,7 +364,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		)
 	}
 
-	rpcClient, err := rpchttp.New("tcp://localhost:26657", "/websocket")
+	rpcClient, err := rpchttp.New("tcp://val0:26657", "/websocket")
 	s.Require().NoError(err)
 
 	var attempt int
@@ -523,6 +524,6 @@ func noRestart(config *docker.HostConfig) {
 }
 
 func useHostNetwork(config *docker.HostConfig) {
-	config.NetworkMode = "host"
+	// config.NetworkMode = "host"
 	config.Privileged = true
 }

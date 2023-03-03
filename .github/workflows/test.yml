@@ -15,6 +15,7 @@ on:
 jobs:
   test-coverage-upload:
     runs-on: ubuntu-latest
+    container: golang:1.20
 
     services:
       dummy:
@@ -25,9 +26,9 @@ jobs:
           - 8088:8088
 
     steps:
-      - uses: actions/setup-go@v3
-        with:
-          go-version: 1.19
+      # - uses: actions/setup-go@v3
+      #   with:
+      #     go-version: 1.19
 
       - uses: actions/checkout@v3
 
