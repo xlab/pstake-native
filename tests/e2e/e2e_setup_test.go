@@ -43,11 +43,11 @@ var (
 type IntegrationTestSuite struct {
 	suite.Suite
 
-	tmpDirs []string
-	chainA  *chain
-	chainB  *chain
-	dkrPool *dockertest.Pool
-	// dkrNet         *dockertest.Network
+	tmpDirs        []string
+	chainA         *chain
+	chainB         *chain
+	dkrPool        *dockertest.Pool
+	dkrNet         *dockertest.Network
 	hermesResource *dockertest.Resource
 	valResources   map[string][]*dockertest.Resource
 }
@@ -75,6 +75,12 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	for idx, net := range networks {
 		v, _ := json.Marshal(net)
 		s.T().Logf("%d) network: %s", idx, string(v))
+
+		if net.Name == "bridge" {
+			nets, err := s.dkrPool.NetworksByName("bridge")
+			s.Require().NoError(err)
+			s.dkrNet = &nets[0]
+		}
 	}
 
 	// s.dkrNet, err = s.dkrPool.CreateNetwork(fmt.Sprintf("%s-%s-testnet", s.chainA.id, s.chainB.id))
@@ -311,10 +317,11 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		resource, err := s.dkrPool.RunWithOptions(runOpts, noRestart)
 		s.Require().NoError(err)
 
-		s.T().Logf("validator %d port exposed as %s and bound ip %s",
+		s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s)",
 			val.index,
 			resource.GetPort("26657/tcp"),
 			resource.GetBoundIP("26657/tcp"),
+			resource.GetIPInNetwork(s.dkrNet),
 		)
 
 		if val.index == 0 {
@@ -330,7 +337,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		)
 	}
 
-	rpcClient, err := rpchttp.New("tpc://localhost:26657", "/websocket")
+	rpcClient, err := rpchttp.New("tcp://localhost:26657", "/websocket")
 	s.Require().NoError(err)
 
 	var attempt int
