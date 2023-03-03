@@ -290,9 +290,9 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 	s.valResources[c.id] = make([]*dockertest.Resource, len(c.validators))
 	for i, val := range c.validators {
 		runOpts := &dockertest.RunOptions{
-			Name:      val.instanceName(),
-			NetworkID: s.dkrNet.Network.ID,
-			Networks:  []*dockertest.Network{s.dkrNet},
+			Name: val.instanceName(),
+			// NetworkID: s.dkrNet.Network.ID,
+			// Networks:  []*dockertest.Network{s.dkrNet},
 			Mounts: []string{
 				fmt.Sprintf("%s/:/root/.pstaked", val.configDir()),
 			},
@@ -456,8 +456,8 @@ func (s *IntegrationTestSuite) runIBCRelayer() {
 			Name:       fmt.Sprintf("%s-%s-relayer", s.chainA.id, s.chainB.id),
 			Repository: "ghcr.io/cosmos/hermes-e2e",
 			Tag:        "0.12.0",
-			NetworkID:  s.dkrNet.Network.ID,
-			Networks:   []*dockertest.Network{s.dkrNet},
+			// NetworkID:  s.dkrNet.Network.ID,
+			// Networks:   []*dockertest.Network{s.dkrNet},
 			Mounts: []string{
 				fmt.Sprintf("%s/:/root/hermes", hermesCfgPath),
 			},
