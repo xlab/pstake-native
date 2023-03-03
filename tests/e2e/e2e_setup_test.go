@@ -315,51 +315,44 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 			}
 		}
 
-		resource, err := s.dkrPool.RunWithOptions(runOpts, noRestart, networkFix)
+		resource, err := s.dkrPool.RunWithOptions(runOpts, noRestart, useHostNetwork)
 		s.Require().NoError(err)
 
-		var bridgeNet *dockertest.Network
-		if val.index == 0 {
-			s.T().Log("browsing existing networks:")
-			networks, err := s.dkrPool.Client.ListNetworks()
-			s.Require().NoError(err)
-			for idx, net := range networks {
-				v, _ := json.Marshal(net)
-				s.T().Logf("%d) network: %s", idx, string(v))
+		// var bridgeNet *dockertest.Network
+		// if val.index == 0 {
+		// 	s.T().Log("browsing existing networks:")
+		// 	networks, err := s.dkrPool.Client.ListNetworks()
+		// 	s.Require().NoError(err)
+		// 	for idx, net := range networks {
+		// 		v, _ := json.Marshal(net)
+		// 		s.T().Logf("%d) network: %s", idx, string(v))
 
-				if net.Name == "bridge" {
-					nets, err := s.dkrPool.NetworksByName(net.Name)
-					s.Require().NoError(err)
-					bridgeNet = &nets[0]
-				}
-			}
+		// 		if net.Name == "bridge" {
+		// 			nets, err := s.dkrPool.NetworksByName(net.Name)
+		// 			s.Require().NoError(err)
+		// 			bridgeNet = &nets[0]
+		// 		}
+		// 	}
 
-			if err := connectToNetworkWithAlias(
-				s.dkrPool.Client,
-				resource,
-				bridgeNet,
-				fmt.Sprintf("val%d", i),
-			); err != nil {
-				s.T().Logf("reconnect to bridgeNet %s (%s) failed? %+v", bridgeNet.Network.ID, bridgeNet.Network.Name, err)
-			}
-		} else {
-			bridgeNet = s.dkrNet
-		}
+		// 	if err := connectToNetworkWithAlias(
+		// 		s.dkrPool.Client,
+		// 		resource,
+		// 		bridgeNet,
+		// 		fmt.Sprintf("val%d", i),
+		// 	); err != nil {
+		// 		s.T().Logf("reconnect to bridgeNet %s (%s) failed? %+v", bridgeNet.Network.ID, bridgeNet.Network.Name, err)
+		// 	}
+		// } else {
+		// 	bridgeNet = s.dkrNet
+		// }
 
-		s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s / %s)",
-			val.index,
-			resource.GetPort("26657/tcp"),
-			resource.GetBoundIP("26657/tcp"),
-			resource.GetIPInNetwork(s.dkrNet),
-			resource.GetIPInNetwork(bridgeNet),
-		)
-
-		if val.index == 0 {
-			firstNodeTendermintRPC = fmt.Sprintf(
-				"tcp://%s:26657",
-				fmt.Sprintf("val%d", i),
-			)
-		}
+		// s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s / %s)",
+		// 	val.index,
+		// 	resource.GetPort("26657/tcp"),
+		// 	resource.GetBoundIP("26657/tcp"),
+		// 	resource.GetIPInNetwork(s.dkrNet),
+		// 	resource.GetIPInNetwork(bridgeNet),
+		// )
 
 		s.valResources[c.id][i] = resource
 		v, _ := json.Marshal(resource.Container.NetworkSettings)
@@ -370,7 +363,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		)
 	}
 
-	rpcClient, err := rpchttp.New(firstNodeTendermintRPC, "/websocket")
+	rpcClient, err := rpchttp.New("tcp://localhost:26657", "/websocket")
 	s.Require().NoError(err)
 
 	var attempt int
@@ -478,7 +471,7 @@ func (s *IntegrationTestSuite) runIBCRelayer() {
 				"chmod +x /root/hermes/hermes_bootstrap.sh && /root/hermes/hermes_bootstrap.sh",
 			},
 		},
-		noRestart, networkFix,
+		noRestart, useHostNetwork,
 	)
 	s.Require().NoError(err)
 
@@ -529,7 +522,7 @@ func noRestart(config *docker.HostConfig) {
 	}
 }
 
-func networkFix(config *docker.HostConfig) {
+func useHostNetwork(config *docker.HostConfig) {
 	config.NetworkMode = "host"
 	config.Privileged = true
 }
