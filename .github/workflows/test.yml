@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - develop
+      - xlab/testci
   pull_request:
     branches:
       - main
       - develop
+      - xlab/testci
 
 jobs:
   test-coverage-upload:
