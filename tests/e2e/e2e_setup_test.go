@@ -267,6 +267,7 @@ func (s *IntegrationTestSuite) initValidatorConfigs(c *chain) {
 func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 	s.T().Logf("starting PStake %s validator containers...", c.id)
 
+	var firstNodeTendermintRPC string
 	s.valResources[c.id] = make([]*dockertest.Resource, len(c.validators))
 	for i, val := range c.validators {
 		runOpts := &dockertest.RunOptions{
@@ -297,31 +298,53 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		resource, err := s.dkrPool.RunWithOptions(runOpts, noRestart)
 		s.Require().NoError(err)
 
+		s.T().Logf("validator %d port exposed as %s and bound ip %s",
+			val.index,
+			resource.GetPort("26657/tcp"),
+			resource.GetBoundIP("26657/tcp"),
+		)
+
+		if val.index == 0 {
+			firstNodeTendermintRPC = "tcp://" + resource.GetHostPort("26657/tcp")
+		}
+
 		s.valResources[c.id][i] = resource
-		s.T().Logf("started PStake %s validator container: %s", c.id, resource.Container.ID)
+		v, _ := json.Marshal(resource.Container.NetworkSettings)
+		s.T().Logf("started PStake %s validator container: %s, running on container NetworkSettings: %s",
+			c.id,
+			resource.Container.ID,
+			string(v),
+		)
 	}
 
-	rpcClient, err := rpchttp.New("tcp://localhost:26657", "/websocket")
+	rpcClient, err := rpchttp.New(firstNodeTendermintRPC, "/websocket")
 	s.Require().NoError(err)
 
+	var attempt int
 	s.Require().Eventually(
 		func() bool {
+			attempt++
+
 			ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 			defer cancel()
 
 			status, err := rpcClient.Status(ctx)
 			if err != nil {
+				s.T().Logf("attempt to get RPC status %d, error: %+v", attempt, err)
 				return false
 			}
 
 			// let the node produce a few blocks
 			if status.SyncInfo.CatchingUp || status.SyncInfo.LatestBlockHeight < 3 {
+				v, _ := json.Marshal(status)
+				s.T().Logf("attempt to get RPC status %d, status now: %s", attempt, string(v))
 				return false
 			}
 
+			s.T().Logf("connected!!! TmRPC: %s", firstNodeTendermintRPC)
 			return true
 		},
-		5*time.Minute,
+		1*time.Minute,
 		time.Second,
 		"PStake node failed to produce blocks",
 	)

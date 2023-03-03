@@ -14,6 +14,12 @@ jobs:
   test-coverage-upload:
     runs-on: ubuntu-latest
 
+    services:
+      dind:
+        image: docker:23.0-rc-dind-rootless
+        ports:
+          - 2375:2375
+
     steps:
       - uses: actions/setup-go@v3
         with:
