@@ -76,8 +76,8 @@ func (s *IntegrationTestSuite) SetupSuite() {
 		v, _ := json.Marshal(net)
 		s.T().Logf("%d) network: %s", idx, string(v))
 
-		if net.Name == "host" {
-			nets, err := s.dkrPool.NetworksByName("host")
+		if net.Name == "bridge" {
+			nets, err := s.dkrPool.NetworksByName("bridge")
 			s.Require().NoError(err)
 			s.dkrNet = &nets[0]
 		}
@@ -318,7 +318,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		s.Require().NoError(err)
 
 		if err := resource.ConnectToNetwork(s.dkrNet); err != nil {
-			s.T().Logf("reconnect to s.dkrNet %s failed? %+v", s.dkrNet.Network.ID, err)
+			s.T().Logf("reconnect to s.dkrNet %s (%s) failed? %+v", s.dkrNet.Network.ID, s.dkrNet.Network.Name, err)
 		}
 
 		s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s)",
@@ -329,7 +329,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		)
 
 		if val.index == 0 {
-			firstNodeTendermintRPC = "tcp://" + resource.GetHostPort("26657/tcp")
+			firstNodeTendermintRPC = "tcp://172.17.0.2:26657" // "tcp://" + resource.GetHostPort("26657/tcp")
 		}
 
 		s.valResources[c.id][i] = resource
@@ -341,7 +341,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		)
 	}
 
-	rpcClient, err := rpchttp.New("tcp://localhost:26657", "/websocket")
+	rpcClient, err := rpchttp.New("tcp://172.17.0.2:26657", "/websocket")
 	s.Require().NoError(err)
 
 	var attempt int
