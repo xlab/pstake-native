@@ -76,8 +76,8 @@ func (s *IntegrationTestSuite) SetupSuite() {
 		v, _ := json.Marshal(net)
 		s.T().Logf("%d) network: %s", idx, string(v))
 
-		if net.Name == "bridge" {
-			nets, err := s.dkrPool.NetworksByName("bridge")
+		if net.Name == "host" {
+			nets, err := s.dkrPool.NetworksByName("host")
 			s.Require().NoError(err)
 			s.dkrNet = &nets[0]
 		}
@@ -316,6 +316,10 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 
 		resource, err := s.dkrPool.RunWithOptions(runOpts, noRestart)
 		s.Require().NoError(err)
+
+		if err := resource.ConnectToNetwork(s.dkrNet); err != nil {
+			s.T().Logf("reconnect to s.dkrNet %s failed? %+v", s.dkrNet.Network.ID, err)
+		}
 
 		s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s)",
 			val.index,
