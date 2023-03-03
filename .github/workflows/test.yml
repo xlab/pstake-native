@@ -13,6 +13,7 @@ on:
 jobs:
   test-coverage-upload:
     runs-on: ubuntu-latest
+    container: ubuntu
 
     services:
       dind:
