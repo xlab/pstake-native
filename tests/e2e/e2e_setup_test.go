@@ -341,7 +341,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		)
 	}
 
-	rpcClient, err := rpchttp.New("tcp://localhost:26657", "/websocket")
+	rpcClient, err := rpchttp.New("tcp://172.17.0.2:26657", "/websocket")
 	s.Require().NoError(err)
 
 	var attempt int
