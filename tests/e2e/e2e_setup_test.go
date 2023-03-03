@@ -283,7 +283,6 @@ func (s *IntegrationTestSuite) initValidatorConfigs(c *chain) {
 func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 	s.T().Logf("starting PStake %s validator containers...", c.id)
 
-	jobContainerNetwork := os.Getenv("JOB_CONTAINER_NETWORK")
 	s.T().Logf("env github actions? %s github network id? %s", os.Getenv("GITHUB_ACTIONS"), os.Getenv("JOB_CONTAINER_NETWORK"))
 
 	var firstNodeTendermintRPC string
@@ -291,7 +290,8 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 	for i, val := range c.validators {
 		runOpts := &dockertest.RunOptions{
 			Name:      val.instanceName(),
-			NetworkID: jobContainerNetwork,
+			NetworkID: s.dkrNet.Network.ID,
+			Networks:  []*dockertest.Network{s.dkrNet},
 			Mounts: []string{
 				fmt.Sprintf("%s/:/root/.pstaked", val.configDir()),
 			},
@@ -388,7 +388,6 @@ func (s *IntegrationTestSuite) runIBCRelayer() {
 	)
 	s.Require().NoError(err)
 
-	jobContainerNetwork := os.Getenv("JOB_CONTAINER_NETWORK")
 	s.T().Logf("env github actions? %s github network id? %s", os.Getenv("GITHUB_ACTIONS"), os.Getenv("JOB_CONTAINER_NETWORK"))
 
 	s.hermesResource, err = s.dkrPool.RunWithOptions(
@@ -396,7 +395,8 @@ func (s *IntegrationTestSuite) runIBCRelayer() {
 			Name:       fmt.Sprintf("%s-%s-relayer", s.chainA.id, s.chainB.id),
 			Repository: "ghcr.io/cosmos/hermes-e2e",
 			Tag:        "0.12.0",
-			NetworkID:  jobContainerNetwork,
+			NetworkID:  s.dkrNet.Network.ID,
+			Networks:   []*dockertest.Network{s.dkrNet},
 			Mounts: []string{
 				fmt.Sprintf("%s/:/root/hermes", hermesCfgPath),
 			},
