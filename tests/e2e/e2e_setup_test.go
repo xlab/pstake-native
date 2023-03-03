@@ -43,11 +43,11 @@ var (
 type IntegrationTestSuite struct {
 	suite.Suite
 
-	tmpDirs        []string
-	chainA         *chain
-	chainB         *chain
-	dkrPool        *dockertest.Pool
-	dkrNet         *dockertest.Network
+	tmpDirs []string
+	chainA  *chain
+	chainB  *chain
+	dkrPool *dockertest.Pool
+	// dkrNet         *dockertest.Network
 	hermesResource *dockertest.Resource
 	valResources   map[string][]*dockertest.Resource
 }
@@ -69,8 +69,8 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	s.dkrPool, err = dockertest.NewPool("")
 	s.Require().NoError(err)
 
-	s.dkrNet, err = s.dkrPool.CreateNetwork(fmt.Sprintf("%s-%s-testnet", s.chainA.id, s.chainB.id))
-	s.Require().NoError(err)
+	// s.dkrNet, err = s.dkrPool.CreateNetwork(fmt.Sprintf("%s-%s-testnet", s.chainA.id, s.chainB.id))
+	// s.Require().NoError(err)
 
 	s.valResources = make(map[string][]*dockertest.Resource)
 
@@ -116,7 +116,7 @@ func (s *IntegrationTestSuite) TearDownSuite() {
 		}
 	}
 
-	s.Require().NoError(s.dkrPool.RemoveNetwork(s.dkrNet))
+	// s.Require().NoError(s.dkrPool.RemoveNetwork(s.dkrNet))
 
 	os.RemoveAll(s.chainA.dataDir)
 	os.RemoveAll(s.chainB.dataDir)
@@ -267,12 +267,15 @@ func (s *IntegrationTestSuite) initValidatorConfigs(c *chain) {
 func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 	s.T().Logf("starting PStake %s validator containers...", c.id)
 
+	jobContainerNetwork := os.Getenv("JOB_CONTAINER_NETWORK")
+	s.T().Logf("env github actions? %s github network id? %s", os.Getenv("GITHUB_ACTIONS"), os.Getenv("JOB_CONTAINER_NETWORK"))
+
 	var firstNodeTendermintRPC string
 	s.valResources[c.id] = make([]*dockertest.Resource, len(c.validators))
 	for i, val := range c.validators {
 		runOpts := &dockertest.RunOptions{
 			Name:      val.instanceName(),
-			NetworkID: s.dkrNet.Network.ID,
+			NetworkID: jobContainerNetwork,
 			Mounts: []string{
 				fmt.Sprintf("%s/:/root/.pstaked", val.configDir()),
 			},
@@ -368,12 +371,15 @@ func (s *IntegrationTestSuite) runIBCRelayer() {
 	)
 	s.Require().NoError(err)
 
+	jobContainerNetwork := os.Getenv("JOB_CONTAINER_NETWORK")
+	s.T().Logf("env github actions? %s github network id? %s", os.Getenv("GITHUB_ACTIONS"), os.Getenv("JOB_CONTAINER_NETWORK"))
+
 	s.hermesResource, err = s.dkrPool.RunWithOptions(
 		&dockertest.RunOptions{
 			Name:       fmt.Sprintf("%s-%s-relayer", s.chainA.id, s.chainB.id),
 			Repository: "ghcr.io/cosmos/hermes-e2e",
 			Tag:        "0.12.0",
-			NetworkID:  s.dkrNet.Network.ID,
+			NetworkID:  jobContainerNetwork,
 			Mounts: []string{
 				fmt.Sprintf("%s/:/root/hermes", hermesCfgPath),
 			},
