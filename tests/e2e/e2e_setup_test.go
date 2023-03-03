@@ -343,7 +343,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 			s.T().Logf("reconnect to s.dkrNet %s (%s) failed? %+v", s.dkrNet.Network.ID, s.dkrNet.Network.Name, err)
 		}
 
-		if val.index == 0 {
+		if val.index == 1 {
 			aliases := resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases
 
 			s.T().Log(
