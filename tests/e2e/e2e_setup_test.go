@@ -334,29 +334,41 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		// 		}
 		// 	}
 
-		// if err := connectToNetworkWithAlias(
-		// 	s.dkrPool.Client,
-		// 	resource,
-		// 	s.dkrNet,
-		// 	fmt.Sprintf("val%d", i),
-		// ); err != nil {
-		// 	s.T().Logf("reconnect to s.dkrNet %s (%s) failed? %+v", s.dkrNet.Network.ID, s.dkrNet.Network.Name, err)
-		// }
+		if err := connectToNetworkWithAlias(
+			s.dkrPool.Client,
+			resource,
+			s.dkrNet,
+			fmt.Sprintf("val%d", i),
+		); err != nil {
+			s.T().Logf("reconnect to s.dkrNet %s (%s) failed? %+v", s.dkrNet.Network.ID, s.dkrNet.Network.Name, err)
+		}
 
-		// if val.index == 1 {
-		// 	aliases := resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases
+		if val.index == 0 {
+			aliases := resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases
 
-		// 	s.T().Log(
-		// 		"available aliases on github net:",
-		// 		aliases,
-		// 	)
+			s.T().Log(
+				"available aliases on github net:",
+				aliases,
+			)
 
-		// 	if len(aliases) > 0 {
-		// 		firstNodeTendermintRPC = fmt.Sprintf("tcp://%s:26657", aliases[0])
-		// 	} else {
-		// 		firstNodeTendermintRPC = "tcp://localhost:26657"
-		// 	}
-		// }
+			if len(aliases) > 0 {
+				firstNodeTendermintRPC = fmt.Sprintf("tcp://%s:26657", aliases[0])
+			} else {
+				firstNodeTendermintRPC = "tcp://localhost:26657"
+			}
+
+			go func() {
+				s.T().Log("getting val0 container logs")
+				_ = s.dkrPool.Client.Logs(docker.LogsOptions{
+					Context:      context.Background(),
+					Container:    resource.Container.ID,
+					OutputStream: os.Stderr,
+					ErrorStream:  os.Stderr,
+					Stdout:       true,
+					Stderr:       true,
+				})
+			}()
+		}
 
 		// } else {
 		// 	bridgeNet = s.dkrNet
@@ -384,7 +396,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		)
 	}
 
-	rpcClient, err := rpchttp.New("tcp://127.0.0.11:26657", "/websocket")
+	rpcClient, err := rpchttp.New(firstNodeTendermintRPC, "/websocket")
 	s.Require().NoError(err)
 
 	var attempt int
@@ -394,6 +406,18 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 
 			ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 			defer cancel()
+
+			go func() {
+				s.T().Logf("getting val0 container logs (during attempt %d)", attempt)
+				_ = s.dkrPool.Client.Logs(docker.LogsOptions{
+					Context:      context.Background(),
+					Container:    s.valResources[c.id][0].Container.ID,
+					OutputStream: os.Stderr,
+					ErrorStream:  os.Stderr,
+					Stdout:       true,
+					Stderr:       true,
+				})
+			}()
 
 			status, err := rpcClient.Status(ctx)
 			if err != nil {
@@ -545,6 +569,6 @@ func noRestart(config *docker.HostConfig) {
 }
 
 func useHostNetwork(config *docker.HostConfig) {
-	config.NetworkMode = "host"
+	// config.NetworkMode = "host"
 	config.Privileged = true
 }
