@@ -344,23 +344,30 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		}
 
 		if val.index == 0 {
+			aliases := resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases
+
 			s.T().Log(
 				"available aliases on github net:",
-				resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases,
+				aliases,
 			)
+
+			if len(aliases) > 0 {
+				firstNodeTendermintRPC = fmt.Sprintf("tcp://%s:26657", aliases[0])
+			} else {
+				firstNodeTendermintRPC = "tcp://localhost:26657"
+			}
 		}
 
 		// } else {
 		// 	bridgeNet = s.dkrNet
 		// }
 
-		// s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s / %s)",
-		// 	val.index,
-		// 	resource.GetPort("26657/tcp"),
-		// 	resource.GetBoundIP("26657/tcp"),
-		// 	resource.GetIPInNetwork(s.dkrNet),
-		// 	resource.GetIPInNetwork(bridgeNet),
-		// )
+		s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s)",
+			val.index,
+			resource.GetPort("26657/tcp"),
+			resource.GetBoundIP("26657/tcp"),
+			resource.GetIPInNetwork(s.dkrNet),
+		)
 
 		s.valResources[c.id][i] = resource
 		v, _ := json.Marshal(resource.Container.NetworkSettings)
@@ -371,7 +378,7 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		)
 	}
 
-	rpcClient, err := rpchttp.New("tcp://val0:26657", "/websocket")
+	rpcClient, err := rpchttp.New(firstNodeTendermintRPC, "/websocket")
 	s.Require().NoError(err)
 
 	var attempt int
