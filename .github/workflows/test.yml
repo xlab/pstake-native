@@ -19,9 +19,8 @@ jobs:
     services:
       dummy:
         image: crazymax/loop
-        environment:
-          - "DURATION=600s"
-        restart: always
+        env:
+          DURATION: 600s
         ports:
           - 8088:8088
 
