@@ -22,6 +22,7 @@ import (
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
+	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 	tmconfig "github.com/tendermint/tendermint/config"
@@ -69,8 +70,24 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	s.dkrPool, err = dockertest.NewPool("")
 	s.Require().NoError(err)
 
-	s.dkrNet, err = s.dkrPool.CreateNetwork(fmt.Sprintf("%s-%s-testnet", s.chainA.id, s.chainB.id))
+	s.T().Log("found existing networks:")
+	networks, err := s.dkrPool.Client.ListNetworks()
 	s.Require().NoError(err)
+	for idx, net := range networks {
+		v, _ := json.Marshal(net)
+		s.T().Logf("%d) network: %s", idx, string(v))
+
+		if strings.Contains(net.Name, "github_") {
+			nets, err := s.dkrPool.NetworksByName(net.Name)
+			s.Require().NoError(err)
+			s.dkrNet = &nets[0]
+		}
+	}
+
+	// s.dkrNet, err = s.dkrPool.CreateNetwork(fmt.Sprintf("%s-%s-testnet", s.chainA.id, s.chainB.id))
+	// s.Require().NoError(err)
+
+	// s.dkrPool.Client.ConnectNetwork("", docker.NetworkConnectionOptions{})
 
 	s.valResources = make(map[string][]*dockertest.Resource)
 
@@ -116,7 +133,7 @@ func (s *IntegrationTestSuite) TearDownSuite() {
 		}
 	}
 
-	s.Require().NoError(s.dkrPool.RemoveNetwork(s.dkrNet))
+	// s.Require().NoError(s.dkrPool.RemoveNetwork(s.dkrNet))
 
 	os.RemoveAll(s.chainA.dataDir)
 	os.RemoveAll(s.chainB.dataDir)
@@ -267,12 +284,15 @@ func (s *IntegrationTestSuite) initValidatorConfigs(c *chain) {
 func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 	s.T().Logf("starting PStake %s validator containers...", c.id)
 
+	s.T().Logf("env github actions? %s github network id? %s", os.Getenv("GITHUB_ACTIONS"), os.Getenv("JOB_CONTAINER_NETWORK"))
+
 	var firstNodeTendermintRPC string
 	s.valResources[c.id] = make([]*dockertest.Resource, len(c.validators))
 	for i, val := range c.validators {
 		runOpts := &dockertest.RunOptions{
-			Name:      val.instanceName(),
-			NetworkID: s.dkrNet.Network.ID,
+			Name: val.instanceName(),
+			// NetworkID: s.dkrNet.Network.ID,
+			// Networks:  []*dockertest.Network{s.dkrNet},
 			Mounts: []string{
 				fmt.Sprintf("%s/:/root/.pstaked", val.configDir()),
 			},
@@ -295,29 +315,88 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 			}
 		}
 
-		resource, err := s.dkrPool.RunWithOptions(runOpts, noRestart)
+		resource, err := s.dkrPool.RunWithOptions(runOpts, noRestart, useHostNetwork)
 		s.Require().NoError(err)
 
-		s.T().Logf("validator %d port exposed as %s and bound ip %s",
+		// var bridgeNet *dockertest.Network
+		// if val.index == 0 {
+		// 	s.T().Log("browsing existing networks:")
+		// 	networks, err := s.dkrPool.Client.ListNetworks()
+		// 	s.Require().NoError(err)
+		// 	for idx, net := range networks {
+		// 		v, _ := json.Marshal(net)
+		// 		s.T().Logf("%d) network: %s", idx, string(v))
+
+		// 		if net.Name == "bridge" {
+		// 			nets, err := s.dkrPool.NetworksByName(net.Name)
+		// 			s.Require().NoError(err)
+		// 			bridgeNet = &nets[0]
+		// 		}
+		// 	}
+
+		if err := connectToNetworkWithAlias(
+			s.dkrPool.Client,
+			resource,
+			s.dkrNet,
+			fmt.Sprintf("val%d", i),
+		); err != nil {
+			s.T().Logf("reconnect to s.dkrNet %s (%s) failed? %+v", s.dkrNet.Network.ID, s.dkrNet.Network.Name, err)
+		}
+
+		if val.index == 0 {
+			aliases := resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases
+
+			s.T().Log(
+				"available aliases on github net:",
+				aliases,
+			)
+
+			if len(aliases) > 0 {
+				firstNodeTendermintRPC = fmt.Sprintf("tcp://%s:26657", aliases[0])
+			} else {
+				firstNodeTendermintRPC = "tcp://localhost:26657"
+			}
+
+			go func() {
+				s.T().Log("getting val0 container logs")
+				_ = s.dkrPool.Client.Logs(docker.LogsOptions{
+					Context:      context.Background(),
+					Container:    resource.Container.ID,
+					OutputStream: os.Stderr,
+					ErrorStream:  os.Stderr,
+					Stdout:       true,
+					Stderr:       true,
+				})
+			}()
+		}
+
+		// } else {
+		// 	bridgeNet = s.dkrNet
+		// }
+
+		s.T().Logf("validator %d port exposed as %s and bound ip %s (IP in net %s)",
 			val.index,
 			resource.GetPort("26657/tcp"),
 			resource.GetBoundIP("26657/tcp"),
+			resource.GetIPInNetwork(s.dkrNet),
 		)
 
-		if val.index == 0 {
-			firstNodeTendermintRPC = "tcp://" + resource.GetHostPort("26657/tcp")
-		}
+		// refresh internal representation
+		container, err := s.dkrPool.Client.InspectContainer(resource.Container.ID)
+		s.Require().NoError(err)
+		vv, _ := json.Marshal(container)
 
 		s.valResources[c.id][i] = resource
 		v, _ := json.Marshal(resource.Container.NetworkSettings)
-		s.T().Logf("started PStake %s validator container: %s, running on container NetworkSettings: %s",
+		s.T().Logf("started PStake %s validator container: %s, running on container NetworkSettings: %s; container info: %s",
 			c.id,
 			resource.Container.ID,
 			string(v),
+			string(vv),
 		)
 	}
 
-	rpcClient, err := rpchttp.New(firstNodeTendermintRPC, "/websocket")
+	rpcClient, err := rpchttp.New("tcp://dind:26657", "/websocket")
 	s.Require().NoError(err)
 
 	var attempt int
@@ -327,6 +406,18 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 
 			ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 			defer cancel()
+
+			go func() {
+				s.T().Logf("getting val0 container logs (during attempt %d)", attempt)
+				_ = s.dkrPool.Client.Logs(docker.LogsOptions{
+					Context:      context.Background(),
+					Container:    s.valResources[c.id][0].Container.ID,
+					OutputStream: os.Stderr,
+					ErrorStream:  os.Stderr,
+					Stdout:       true,
+					Stderr:       true,
+				})
+			}()
 
 			status, err := rpcClient.Status(ctx)
 			if err != nil {
@@ -350,6 +441,35 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 	)
 }
 
+// connectToNetworkWithAlias connects container to network and assigns an alias to them.
+func connectToNetworkWithAlias(
+	client *docker.Client,
+	r *dockertest.Resource,
+	network *dockertest.Network,
+	alias string,
+) error {
+	err := client.ConnectNetwork(
+		network.Network.ID,
+		docker.NetworkConnectionOptions{Container: r.Container.ID},
+	)
+	if err != nil {
+		return errors.Wrap(err, "Failed to connect container to network")
+	}
+
+	// refresh internal representation
+	r.Container, err = client.InspectContainer(r.Container.ID)
+	if err != nil {
+		return errors.Wrap(err, "Failed to refresh container information")
+	}
+
+	network.Network, err = client.NetworkInfo(network.Network.ID)
+	if err != nil {
+		return errors.Wrap(err, "Failed to refresh network information")
+	}
+
+	return nil
+}
+
 func (s *IntegrationTestSuite) runIBCRelayer() {
 	s.T().Log("starting Hermes relayer container...")
 
@@ -368,12 +488,15 @@ func (s *IntegrationTestSuite) runIBCRelayer() {
 	)
 	s.Require().NoError(err)
 
+	s.T().Logf("env github actions? %s github network id? %s", os.Getenv("GITHUB_ACTIONS"), os.Getenv("JOB_CONTAINER_NETWORK"))
+
 	s.hermesResource, err = s.dkrPool.RunWithOptions(
 		&dockertest.RunOptions{
 			Name:       fmt.Sprintf("%s-%s-relayer", s.chainA.id, s.chainB.id),
 			Repository: "ghcr.io/cosmos/hermes-e2e",
 			Tag:        "0.12.0",
-			NetworkID:  s.dkrNet.Network.ID,
+			// NetworkID:  s.dkrNet.Network.ID,
+			// Networks:   []*dockertest.Network{s.dkrNet},
 			Mounts: []string{
 				fmt.Sprintf("%s/:/root/hermes", hermesCfgPath),
 			},
@@ -394,7 +517,7 @@ func (s *IntegrationTestSuite) runIBCRelayer() {
 				"chmod +x /root/hermes/hermes_bootstrap.sh && /root/hermes/hermes_bootstrap.sh",
 			},
 		},
-		noRestart,
+		noRestart, useHostNetwork,
 	)
 	s.Require().NoError(err)
 
@@ -443,4 +566,9 @@ func noRestart(config *docker.HostConfig) {
 	config.RestartPolicy = docker.RestartPolicy{
 		Name: "no",
 	}
+}
+
+func useHostNetwork(config *docker.HostConfig) {
+	// config.NetworkMode = "host"
+	config.Privileged = true
 }
