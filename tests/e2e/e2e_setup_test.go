@@ -334,13 +334,20 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 		// 		}
 		// 	}
 
-		if err := connectToNetworkWithAlias(
-			s.dkrPool.Client,
-			resource,
-			s.dkrNet,
-			fmt.Sprintf("val%d", i),
-		); err != nil {
-			s.T().Logf("reconnect to s.dkrNet %s (%s) failed? %+v", s.dkrNet.Network.ID, s.dkrNet.Network.Name, err)
+		// if err := connectToNetworkWithAlias(
+		// 	s.dkrPool.Client,
+		// 	resource,
+		// 	s.dkrNet,
+		// 	fmt.Sprintf("val%d", i),
+		// ); err != nil {
+		// 	s.T().Logf("reconnect to s.dkrNet %s (%s) failed? %+v", s.dkrNet.Network.ID, s.dkrNet.Network.Name, err)
+		// }
+
+		if val.index == 0 {
+			s.T().Log(
+				"available aliases on github net:",
+				resource.Container.NetworkSettings.Networks[s.dkrNet.Network.Name].Aliases,
+			)
 		}
 
 		// } else {
