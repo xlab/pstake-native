@@ -369,12 +369,18 @@ func (s *IntegrationTestSuite) runValidators(c *chain, portOffset int) {
 			resource.GetIPInNetwork(s.dkrNet),
 		)
 
+		// refresh internal representation
+		container, err := s.dkrPool.Client.InspectContainer(resource.Container.ID)
+		s.Require().NoError(err)
+		vv, _ := json.Marshal(container)
+
 		s.valResources[c.id][i] = resource
 		v, _ := json.Marshal(resource.Container.NetworkSettings)
-		s.T().Logf("started PStake %s validator container: %s, running on container NetworkSettings: %s",
+		s.T().Logf("started PStake %s validator container: %s, running on container NetworkSettings: %s; container info: %s",
 			c.id,
 			resource.Container.ID,
 			string(v),
+			string(vv),
 		)
 	}
 
@@ -416,7 +422,8 @@ func connectToNetworkWithAlias(
 	client *docker.Client,
 	r *dockertest.Resource,
 	network *dockertest.Network,
-	alias string) error {
+	alias string,
+) error {
 	err := client.ConnectNetwork(
 		network.Network.ID,
 		docker.NetworkConnectionOptions{Container: r.Container.ID},
